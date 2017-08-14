@@ -40,6 +40,11 @@ namespace Opc.Ua.Hsl
 
 
         #region 构造方法
+
+        /// <summary>
+        /// 实例化一个对象，选择是否需要从本地文件进行配置客户端信息
+        /// </summary>
+        /// <param name="isConfigLoadByFile">是否从文件中加载配置信息</param>
         public OpcUaClient(bool isConfigLoadByFile)
         {
             if (isConfigLoadByFile)
@@ -74,7 +79,12 @@ namespace Opc.Ua.Hsl
         {
             application.ConfigSectionName = "";
             application.ApplicationType = application.ApplicationConfiguration.ApplicationType;
-            application.ApplicationName = application.ApplicationConfiguration.ApplicationName;
+
+            if (!string.IsNullOrEmpty(application.ApplicationConfiguration.ApplicationName))
+                application.ApplicationName = application.ApplicationConfiguration.ApplicationName;
+            
+            
+
             m_CertificateValidation = new CertificateValidationEventHandler(CertificateValidator_CertificateValidation);
             
         }
@@ -82,6 +92,15 @@ namespace Opc.Ua.Hsl
         #endregion
 
         #region 公开的属性
+
+        /// <summary>
+        /// 应用配置
+        /// </summary>
+        public ApplicationConfiguration AppConfiguration
+        {
+            get { return m_configuration; }
+            set { m_configuration = value; }
+        }
 
         /// <summary>
         /// 服务器的连接地址
@@ -302,32 +321,33 @@ namespace Opc.Ua.Hsl
                 ApplicationName = "OpcUaHslClient",
                 ApplicationType = ApplicationType.Client
             };
-            SecurityConfiguration sConfig = new SecurityConfiguration();
-            sConfig.ApplicationCertificate = new CertificateIdentifier()
+            SecurityConfiguration sConfig = new SecurityConfiguration()
             {
-                StoreType = "Directory",
-                StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\MachineDefault",
-                SubjectName = config.ApplicationName,
-            };
+                ApplicationCertificate = new CertificateIdentifier()
+                {
+                    StoreType = "Directory",
+                    StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\MachineDefault",
+                    SubjectName = config.ApplicationName,
+                },
 
-            sConfig.TrustedPeerCertificates = new CertificateTrustList()
-            {
-                StoreType = "Directory",
-                StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\UA Applications",
-            };
+                TrustedPeerCertificates = new CertificateTrustList()
+                {
+                    StoreType = "Directory",
+                    StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\UA Applications",
+                },
 
-            sConfig.TrustedIssuerCertificates = new CertificateTrustList()
-            {
-                StoreType = "Directory",
-                StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\UA Certificate Authorities",
-            };
+                TrustedIssuerCertificates = new CertificateTrustList()
+                {
+                    StoreType = "Directory",
+                    StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\UA Certificate Authorities",
+                },
 
-            sConfig.RejectedCertificateStore = new CertificateStoreIdentifier()
-            {
-                StoreType = "Directory",
-                StorePath = @"% CommonApplicationData%\OPC Foundation\CertificateStores\RejectedCertificates"
+                RejectedCertificateStore = new CertificateStoreIdentifier()
+                {
+                    StoreType = "Directory",
+                    StorePath = @"% CommonApplicationData%\OPC Foundation\CertificateStores\RejectedCertificates"
+                }
             };
-
             config.SecurityConfiguration = sConfig;
 
 
@@ -537,9 +557,11 @@ namespace Opc.Ua.Hsl
 
             if (endpointUrl != null && endpointUrl.Scheme == uri.Scheme)
             {
-                UriBuilder builder = new UriBuilder(endpointUrl);
-                builder.Host = uri.DnsSafeHost;
-                builder.Port = uri.Port;
+                UriBuilder builder = new UriBuilder(endpointUrl)
+                {
+                    Host = uri.DnsSafeHost,
+                    Port = uri.Port
+                };
                 selectedEndpoint.EndpointUrl = builder.ToString();
             }
 
@@ -612,6 +634,98 @@ namespace Opc.Ua.Hsl
             ClientBase.ValidateDiagnosticInfos(diagnosticInfos, nodesToRead);
 
             return  (T)results[0].Value;
+        }
+
+        /// <summary>
+        /// 写入一个节点的数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool WriteNode<T>(string url, T value)
+        {
+            WriteValue valueToWrite = new WriteValue()
+            {
+                NodeId = new NodeId("ns=2;s=Devices/Device B/Name"),
+                AttributeId = Attributes.Value
+            };
+            valueToWrite.Value.Value = value;
+            valueToWrite.Value.StatusCode = StatusCodes.Good;
+            valueToWrite.Value.ServerTimestamp = DateTime.MinValue;
+            valueToWrite.Value.SourceTimestamp = DateTime.MinValue;
+
+            WriteValueCollection valuesToWrite = new WriteValueCollection
+            {
+                valueToWrite
+            };
+
+            // 写入当前的值
+
+            m_session.Write(
+                null,
+                valuesToWrite,
+                out StatusCodeCollection results,
+                out DiagnosticInfoCollection diagnosticInfos);
+
+            ClientBase.ValidateResponse(results, valuesToWrite);
+            ClientBase.ValidateDiagnosticInfos(diagnosticInfos, valuesToWrite);
+
+            return !StatusCode.IsBad(results[0]);
+        }
+
+
+        public void MonitorValue<T>(string url, Action<T, Action> callback)
+        {
+            var node = new NodeId(url);
+
+
+
+            var sub = new Subscription
+            {
+                PublishingInterval =0,
+                PublishingEnabled = true,
+                LifetimeCount = 0,
+                KeepAliveCount = 0,
+                DisplayName = url,
+                Priority = byte.MaxValue
+            };
+
+
+
+            var item = new MonitoredItem
+            {
+                StartNodeId = node,
+                AttributeId = Attributes.Value,
+                DisplayName = url,
+                SamplingInterval = 100
+            };
+            sub.AddItem(item);
+            m_session.AddSubscription(sub);
+            sub.Create();
+            sub.ApplyChanges();
+
+
+
+            item.Notification += (monitoredItem, args) =>
+            {
+                var p = (MonitoredItemNotification)args.NotificationValue;
+                var t = p.Value.WrappedValue.Value;
+                Action unsubscribe = () =>
+                   {
+                       sub.RemoveItems(sub.MonitoredItems);
+                       sub.Delete(true);
+                       m_session.RemoveSubscription(sub);
+                       sub.Dispose();
+                   };
+                callback((T)t, unsubscribe);
+            };
+
+        }
+
+        public void Subsc()
+        {
+            
         }
 
 
