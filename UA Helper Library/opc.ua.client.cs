@@ -33,10 +33,7 @@ namespace Opc.Ua.Hsl
             {
                 application.ApplicationConfiguration = GetDefaultApplicationConfig();
             }
-            // 检查应用程序的证书
-            application.CheckApplicationInstanceCertificate(false, 0);
 
-            m_configuration = application.ApplicationConfiguration;
             Initilization();
         }
         /// <summary>
@@ -47,22 +44,21 @@ namespace Opc.Ua.Hsl
         {
             // 加载应用程序的配置
             application.ApplicationConfiguration = appConfig;
-            // 检查应用程序的证书
-            application.CheckApplicationInstanceCertificate(false, 0);
-
-            m_configuration = application.ApplicationConfiguration;
+            
             Initilization();
         }
 
 
         private void Initilization()
         {
+            // 检查应用程序的证书
+            application.CheckApplicationInstanceCertificate(false, 0);
+            m_configuration = application.ApplicationConfiguration;
             application.ConfigSectionName = "";
             application.ApplicationType = application.ApplicationConfiguration.ApplicationType;
 
             if (!string.IsNullOrEmpty(application.ApplicationConfiguration.ApplicationName))
                 application.ApplicationName = application.ApplicationConfiguration.ApplicationName;
-            
             
 
             m_CertificateValidation = new CertificateValidationEventHandler(CertificateValidator_CertificateValidation);
@@ -80,6 +76,25 @@ namespace Opc.Ua.Hsl
         {
             get { return m_configuration; }
             set { m_configuration = value; }
+        }
+
+        /// <summary>
+        /// 连接到服务器的时候显示的客户端的名称
+        /// </summary>
+        public string ApplicationName
+        {
+            get
+            {
+                return m_configuration.ApplicationName;
+            }
+            set
+            {
+                if(!string.IsNullOrEmpty(value))
+                {
+                    m_configuration.ApplicationName = value;
+                    application.ApplicationName = value;
+                }
+            }
         }
 
         /// <summary>

@@ -70,6 +70,11 @@
     <Compile Include="opc.ua.foundation.cs" />
     <Compile Include="opc.ua.server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="quickStart\ModelUtils.cs" />
+    <Compile Include="quickStart\MonitoredNode.cs" />
+    <Compile Include="quickStart\NodeHandle.cs" />
+    <Compile Include="quickStart\QuickstartNodeManager.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
