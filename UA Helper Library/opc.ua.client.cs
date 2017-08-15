@@ -10,36 +10,13 @@ using System.Threading.Tasks;
 
 namespace Opc.Ua.Hsl
 {
+    /// <summary>
+    /// 一个封装分opc ua的客户端
+    /// </summary>
     public class OpcUaClient
     {
-
-        #region 私有对象
-
-        private ApplicationInstance application = new ApplicationInstance();
-
-        private ApplicationConfiguration m_configuration;
-        private Session m_session;
-        private bool m_connectedOnce;
-        private Subscription m_subscription;
-        private MonitoredItemNotificationEventHandler m_MonitoredItem_Notification;
-        private int m_reconnectPeriod = 10;
-        private string m_ServerUrl = string.Empty;
-        /// <summary>
-        /// 会话重连时的处理
-        /// </summary>
-        private SessionReconnectHandler m_reconnectHandler;
-        private EventHandler m_ReconnectComplete;
-        private EventHandler m_ReconnectStarting;
-        private EventHandler m_KeepAliveComplete;
-        private EventHandler m_ConnectComplete;
-        private EventHandler<OpcStausEventArgs> m_OpcStatusChange;
-
-        private CertificateValidationEventHandler m_CertificateValidation;
-
-        #endregion
-
-
-        #region 构造方法
+ 
+        #region 构造方法初始化的方法 
 
         /// <summary>
         /// 实例化一个对象，选择是否需要从本地文件进行配置客户端信息
@@ -62,7 +39,10 @@ namespace Opc.Ua.Hsl
             m_configuration = application.ApplicationConfiguration;
             Initilization();
         }
-
+        /// <summary>
+        /// 使用
+        /// </summary>
+        /// <param name="appConfig"></param>
         public OpcUaClient(ApplicationConfiguration appConfig)
         {
             // 加载应用程序的配置
@@ -593,18 +573,11 @@ namespace Opc.Ua.Hsl
         }
 
         #endregion
-
-
-
-
-
-
-
-
+        
         #region 公开的读写操作
 
         /// <summary>
-        /// ns=2;s=Devices/DynamicValue
+        /// 格式  ns=2;s=Devices/DynamicValue
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="url"></param>
@@ -621,7 +594,7 @@ namespace Opc.Ua.Hsl
                 nodeToRead
             };
 
-            // read current value.
+            // 读取当前的值
             m_session.Read(
                 null,
                 0,
@@ -637,17 +610,52 @@ namespace Opc.Ua.Hsl
         }
 
         /// <summary>
-        /// 写入一个节点的数据
+        /// 读取多个节点数据
+        /// </summary>
+        /// <param name="urls"></param>
+        /// <returns></returns>
+        public IEnumerable<DataValue> ReadNodes(string[] urls)
+        {
+            ReadValueIdCollection nodesToRead = new ReadValueIdCollection();
+            for(int i=0;i<urls.Length;i++)
+            {
+                nodesToRead.Add(new ReadValueId()
+                {
+                    NodeId = new NodeId(urls[i]),
+                    AttributeId = Attributes.Value
+                });
+            }
+
+            // 读取当前的值
+            m_session.Read(
+                null,
+                0,
+                TimestampsToReturn.Neither,
+                nodesToRead,
+                out DataValueCollection results,
+                out DiagnosticInfoCollection diagnosticInfos);
+
+            ClientBase.ValidateResponse(results, nodesToRead);
+            ClientBase.ValidateDiagnosticInfos(diagnosticInfos, nodesToRead);
+
+            foreach(var v in results)
+            {
+                yield return v;
+            }
+        }
+
+        /// <summary>
+        /// 写入一个节点的数据(you should use try catch)
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="url"></param>
+        /// <param name="url">格式 ns=2;s=Devices/DynamicValue</param>
         /// <param name="value"></param>
         /// <returns></returns>
         public bool WriteNode<T>(string url, T value)
         {
             WriteValue valueToWrite = new WriteValue()
             {
-                NodeId = new NodeId("ns=2;s=Devices/Device B/Name"),
+                NodeId = new NodeId(url),
                 AttributeId = Attributes.Value
             };
             valueToWrite.Value.Value = value;
@@ -674,7 +682,62 @@ namespace Opc.Ua.Hsl
             return !StatusCode.IsBad(results[0]);
         }
 
+        /// <summary>
+        /// 所有的节点都写入成功，返回<c>True</c>，否则返回<c>False</c>
+        /// </summary>
+        /// <param name="urls">节点名称数组</param>
+        /// <param name="values">节点的值数据</param>
+        /// <returns></returns>
+        public bool WriteNodes(string[] urls, object[] values)
+        {
+            WriteValueCollection valuesToWrite = new WriteValueCollection();
 
+            for(int i=0;i<urls.Length;i++)
+            {
+                if(i<values.Length)
+                {
+                    WriteValue valueToWrite = new WriteValue()
+                    {
+                        NodeId = new NodeId(urls[i]),
+                        AttributeId = Attributes.Value
+                    };
+                    valueToWrite.Value.Value = values[i];
+                    valueToWrite.Value.StatusCode = StatusCodes.Good;
+                    valueToWrite.Value.ServerTimestamp = DateTime.MinValue;
+                    valueToWrite.Value.SourceTimestamp = DateTime.MinValue;
+                }
+            }
+
+            // 写入当前的值
+
+            m_session.Write(
+                null,
+                valuesToWrite,
+                out StatusCodeCollection results,
+                out DiagnosticInfoCollection diagnosticInfos);
+
+            ClientBase.ValidateResponse(results, valuesToWrite);
+            ClientBase.ValidateDiagnosticInfos(diagnosticInfos, valuesToWrite);
+
+            bool result = true;
+            foreach(var r in results)
+            {
+                if (StatusCode.IsBad(r))
+                {
+                    result = false;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 监视一个数据变量
+        /// </summary>
+        /// <typeparam name="T">数据的类型</typeparam>
+        /// <param name="url"></param>
+        /// <param name="callback"></param>
         public void MonitorValue<T>(string url, Action<T, Action> callback)
         {
             var node = new NodeId(url);
@@ -709,8 +772,9 @@ namespace Opc.Ua.Hsl
 
             item.Notification += (monitoredItem, args) =>
             {
-                var p = (MonitoredItemNotification)args.NotificationValue;
-                var t = p.Value.WrappedValue.Value;
+                var notification = (MonitoredItemNotification)args.NotificationValue;
+                if (notification == null) return;//如果为空就退出
+                var t = notification.Value.WrappedValue.Value;
                 Action unsubscribe = () =>
                    {
                        sub.RemoveItems(sub.MonitoredItems);
@@ -723,15 +787,38 @@ namespace Opc.Ua.Hsl
 
         }
 
-        public void Subsc()
+        private void SubscriptionChange<T>(string url, Action<T> action)
         {
-            
+
         }
 
 
         #endregion
+        
+        #region 私有对象
 
+        private ApplicationInstance application = new ApplicationInstance();
 
+        private ApplicationConfiguration m_configuration;
+        private Session m_session;
+        private bool m_connectedOnce;
+        private Subscription m_subscription;
+        private MonitoredItemNotificationEventHandler m_MonitoredItem_Notification;
+        private int m_reconnectPeriod = 10;
+        private string m_ServerUrl = string.Empty;
+        /// <summary>
+        /// 会话重连时的处理
+        /// </summary>
+        private SessionReconnectHandler m_reconnectHandler;
+        private EventHandler m_ReconnectComplete;
+        private EventHandler m_ReconnectStarting;
+        private EventHandler m_KeepAliveComplete;
+        private EventHandler m_ConnectComplete;
+        private EventHandler<OpcStausEventArgs> m_OpcStatusChange;
+
+        private CertificateValidationEventHandler m_CertificateValidation;
+
+        #endregion
 
     }
 }
