@@ -36,7 +36,7 @@ using System.Threading;
 using Opc.Ua;
 using Opc.Ua.Server;
 
-namespace Opc.Ua.Hsl;
+namespace Opc.Ua.Hsl
 {
     /// <summary>
     /// A object which maps a block to a UA object.

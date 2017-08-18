@@ -53,6 +53,7 @@ namespace Opc.Ua.Hsl
         #region IDisposable Members
         /// <summary>
         /// The finializer implementation.
+        /// 终结器实现
         /// </summary>
         ~UnderlyingSystem()
         {
@@ -61,6 +62,7 @@ namespace Opc.Ua.Hsl
 
         /// <summary>
         /// Frees any unmanaged reblocks.
+        /// 释放任何非托管内存
         /// </summary>
         public void Dispose()
         {
@@ -87,6 +89,7 @@ namespace Opc.Ua.Hsl
         #region Public Members
         /// <summary>
         /// A database which stores all known block paths.
+        /// 存储所有已知块路径的数据库
         /// </summary>
         /// <remarks>
         /// These are hardcoded for an example but the real data could come from a DB,
@@ -95,6 +98,13 @@ namespace Opc.Ua.Hsl
         /// The name of the block is the final path element.
         /// The same block can have many paths.
         /// Each preceding element is a segment.
+        /// 
+        /// 这些以硬编码为例，但实际数据可能来自DB，文件或使用非UA API访问的任何其他系统。
+        ///
+        /// 块的名称是最终的路径元素。
+        /// 相同的块可以有很多路径。
+        /// 每个前面的元素是一个段。
+        /// 
         /// </remarks>
         private string[] s_BlockPathDatabase = new string[]
         {
@@ -132,6 +142,7 @@ namespace Opc.Ua.Hsl
 
         /// <summary>
         /// A database which stores all known blocks.
+        /// 存储所有已知块的数据库
         /// </summary>
         /// <remarks>
         /// These are hardcoded for an example but the real data could come from a DB,
@@ -139,6 +150,12 @@ namespace Opc.Ua.Hsl
         /// 
         /// The name of the block is the first element.
         /// The type of block is the second element.
+        /// 
+        /// 这些以硬编码为例，但实际数据可能来自DB，文件或使用非UA API访问的任何其他系统。
+        /// 
+        /// 块的名称是第一个元素
+        /// 块的类型是第二个元素
+        /// 
         /// </remarks>
         private string[] s_BlockDatabase = new string[]
         {

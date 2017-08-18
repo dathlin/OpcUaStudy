@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Opc.Ua;
+using Opc.Ua.Server;
 
 namespace Opc.Ua.Hsl
 {
