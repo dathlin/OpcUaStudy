@@ -9,12 +9,16 @@ namespace Opc.Ua.Hsl
 {
     /// <summary>
     /// A sample implementation of the INodeManager interface.
+    /// 一个INodeManager接口的示例实现。
     /// </summary>
     /// <remarks>
     /// This node manager is a base class used in multiple samples. It implements the INodeManager
     /// interface and allows sub-classes to override only the methods that they need. This example
     /// is not part of the SDK because most real implementations of a INodeManager will need to
     /// modify the behavoir of the base class.
+    /// 
+    /// 此节点管理器是多个样本中使用的基类。 它实现了INodeManager接口，并允许子类仅覆盖他们需要的方法。 
+    /// 该示例不是SDK的一部分，因为INodeManager的大多数实际实现将需要修改基类的行为。
     /// </remarks>
     public class QuickstartNodeManager : INodeManager, INodeIdFactory, IDisposable
     {
