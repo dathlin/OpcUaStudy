@@ -29,6 +29,7 @@ namespace Opc.Ua.Hsl
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NodeHandle"/> class.
+        /// 实例化话一个新的 <see cref="NodeHandle"/> 对象.
         /// </summary>
         /// <param name="nodeId">The node id.</param>
         /// <param name="node">The node.</param>

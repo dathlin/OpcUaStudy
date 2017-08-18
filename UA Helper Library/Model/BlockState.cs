@@ -40,6 +40,7 @@ namespace Opc.Ua.Hsl
 {
     /// <summary>
     /// A object which maps a block to a UA object.
+    /// 将块映射到UA对象的对象
     /// </summary>
     public partial class BlockState : BaseObjectState
     {
@@ -67,9 +68,8 @@ namespace Opc.Ua.Hsl
             this.UserWriteMask = 0;
             this.EventNotifier = EventNotifiers.None;
 
-            UnderlyingSystem system = nodeManager.SystemContext.SystemHandle as UnderlyingSystem;
 
-            if (system != null)
+            if (nodeManager.SystemContext.SystemHandle is UnderlyingSystem system)
             {
                 IList<UnderlyingSystemTag> tags = block.GetTags();
 

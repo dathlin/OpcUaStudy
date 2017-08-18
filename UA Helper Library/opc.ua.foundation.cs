@@ -100,7 +100,6 @@ namespace Opc.Ua.Hsl
         /// <summary>
         /// Gets the display text for the event notifier attribute.
         /// </summary>
-        /// <param name="accessLevel">The event notifier.</param>
         /// <returns>The event notifier formatted as a string.</returns>
         private static string GetEventNotifierDisplayText(byte eventNotifier)
         {

@@ -66,6 +66,6 @@ namespace Opc.Ua.Hsl
         /// A string value.
         /// 一个字符串数据
         /// </summary>
-        String = 4
+        String = 4,
     }
 }

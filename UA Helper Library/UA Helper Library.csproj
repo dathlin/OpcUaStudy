@@ -68,7 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccessServerConfiguration.cs" />
+    <Compile Include="quickStart\DataAccessServerConfiguration.cs" />
     <Compile Include="Model\BlockState.cs" />
     <Compile Include="Model\ModelUtils.cs" />
     <Compile Include="Model\Namespaces.cs" />

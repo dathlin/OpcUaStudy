@@ -39,6 +39,7 @@ namespace Opc.Ua
     #region DataType Identifiers
     /// <summary>
     /// A class that declares constants for all DataTypes in the Model Design.
+    /// 在Model Design中声明所有DataTypes的常量的类
     /// </summary>
     /// <exclude />
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
