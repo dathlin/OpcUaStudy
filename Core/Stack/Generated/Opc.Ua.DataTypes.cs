@@ -694,13 +694,14 @@ namespace Opc.Ua
         #endregion
     }
     #endregion
-    #endif
+#endif
     #endregion
 
     #region IdType Enumeration
-    #if (!OPCUA_EXCLUDE_IdType)
+#if (!OPCUA_EXCLUDE_IdType)
     /// <summary>
     /// The type of identifier used in a node id.
+    /// 在节点id中使用的标识符的类型
     /// </summary>
     /// <exclude />
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
@@ -709,24 +710,28 @@ namespace Opc.Ua
     {
         /// <summary>
         /// The identifier is a numeric value. 0 is a null value.
+        /// 标识符是一个数值。 0是空值。
         /// </summary>
         [EnumMember(Value = "Numeric_0")]
         Numeric = 0,
 
         /// <summary>
         /// The identifier is a string value. An empty string is a null value.
+        /// 标识符是字符串值。 空字符串为空值
         /// </summary>
         [EnumMember(Value = "String_1")]
         String = 1,
 
         /// <summary>
         /// The identifier is a 16 byte structure. 16 zero bytes is a null value.
+        /// 标识符是16字节结构。 16个零字节是一个空值
         /// </summary>
         [EnumMember(Value = "Guid_2")]
         Guid = 2,
 
         /// <summary>
         /// The identifier is an array of bytes. A zero length array is a null value.
+        /// 标识符是字节数组。 零长度数组是空值
         /// </summary>
         [EnumMember(Value = "Opaque_3")]
         Opaque = 3,
@@ -804,13 +809,14 @@ namespace Opc.Ua
         #endregion
     }
     #endregion
-    #endif
+#endif
     #endregion
 
     #region NodeClass Enumeration
     #if (!OPCUA_EXCLUDE_NodeClass)
     /// <summary>
     /// A mask specifying the class of the node.
+    /// 指定节点类的掩码
     /// </summary>
     /// <exclude />
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
@@ -819,54 +825,63 @@ namespace Opc.Ua
     {
         /// <summary>
         /// No classes are selected.
+        /// 没有选择任何类
         /// </summary>
         [EnumMember(Value = "Unspecified_0")]
         Unspecified = 0,
 
         /// <summary>
         /// The node is an object.
+        /// 该节点是一个对象
         /// </summary>
         [EnumMember(Value = "Object_1")]
         Object = 1,
 
         /// <summary>
         /// The node is a variable.
+        /// 该节点是一个值
         /// </summary>
         [EnumMember(Value = "Variable_2")]
         Variable = 2,
 
         /// <summary>
         /// The node is a method.
+        /// 该节点是一个方法
         /// </summary>
         [EnumMember(Value = "Method_4")]
         Method = 4,
 
         /// <summary>
         /// The node is an object type.
+        /// 该节点是一个对象类型
         /// </summary>
         [EnumMember(Value = "ObjectType_8")]
         ObjectType = 8,
 
         /// <summary>
         /// The node is an variable type.
+        /// 该节点是一个值类型
         /// </summary>
         [EnumMember(Value = "VariableType_16")]
         VariableType = 16,
 
         /// <summary>
         /// The node is a reference type.
+        /// 该节点是一个引用类型
         /// </summary>
         [EnumMember(Value = "ReferenceType_32")]
         ReferenceType = 32,
 
         /// <summary>
         /// The node is a data type.
+        /// 该节点是一个数据类型
         /// </summary>
         [EnumMember(Value = "DataType_64")]
         DataType = 64,
 
         /// <summary>
         /// The node is a view.
+        /// 该节点是一个视图
         /// </summary>
         [EnumMember(Value = "View_128")]
         View = 128,

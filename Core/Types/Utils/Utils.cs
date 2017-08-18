@@ -1618,55 +1618,62 @@ namespace Opc.Ua
                 return null;
             }
 
-            // check for cloneable.
-            ICloneable cloneable = value as ICloneable;
+            // 检查是否已经实现了可克隆的接口
 
-            if (cloneable != null)
+            if (value is ICloneable cloneable)
             {
                 return cloneable.Clone();
             }
 
+
+            // 仍未实现可克隆的接口
+
             Type type = value.GetType();
 
-            // nothing to do for value types.
+            // 如果为值类型就直接返回，自动实现了复制
             if (type.IsValueType)
             {
                 return value;
             }
             
             // strings are special a reference type that does not need to be copied.
+            // 如果是字符串类型，虽然是引用类型，但是在赋值上和值类型一致
             if (type == typeof(string))
             {
                 return value;
             }
-            
-            // copy arrays.
-            Array array = value as Array;
 
-            if (array != null)
+            // copy arrays.
+            // 如果是数组类型
+
+            if (value is Array array)
             {
                 Array clone = Array.CreateInstance(type.GetElementType(), array.Length);
 
                 for (int ii = 0; ii < array.Length; ii++)
                 {
-                    clone.SetValue(Utils.Clone(array.GetValue(ii)), ii);
+                    // 此处希望数组里的值是值类型
+                    clone.SetValue(Clone(array.GetValue(ii)), ii);
                 }
 
                 return clone;
             }
 
-            #if !SILVERLIGHT
+#if !SILVERLIGHT
             // copy XmlNode
-            XmlNode node = value as XmlNode;
 
-            if (node != null)
+            // 如果是XmlNode也是直接复制
+
+            if (value is XmlNode node)
             {
                 return node.Clone();
             }
-            #endif
-            
+#endif
+
             // don't know how to clone object.
-            throw new NotSupportedException(Utils.Format("Don't know how to clone objects of type '{0}'", type.FullName));
+            // 此处的其他类型就丢弃，如果强制实现，只能使用序列化反序列化支持
+
+            throw new NotSupportedException(Format("Don't know how to clone objects of type '{0}'", type.FullName));
         }
              
         /// <summary>
@@ -1675,7 +1682,7 @@ namespace Opc.Ua
         public static bool IsEqual(object value1, object value2)
         {
             // check for reference equality.
-            if (Object.ReferenceEquals(value1, value2))
+            if (object.ReferenceEquals(value1, value2))
             {
                 return true;
             }

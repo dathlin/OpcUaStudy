@@ -94,15 +94,17 @@ namespace Opc.Ua
 
     /// <summary>
     /// An interface that can be used to create new node ids.
+    /// 可用于创建新节点ID的接口
     /// </summary>
     public interface INodeIdFactory
     {
         /// <summary>
         /// Creates the NodeId for the specified node.
+        /// 创建指定节点的NodeId
         /// </summary>
-        /// <param name="context">The context.</param>
+        /// <param name="context">上下文</param>
         /// <param name="node">The node.</param>
-        /// <returns>The new NodeId.</returns>
+        /// <returns>新的 NodeId 的实例</returns>
         NodeId New(ISystemContext context, NodeState node);
     }
 

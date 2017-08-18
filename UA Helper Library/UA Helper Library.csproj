@@ -66,14 +66,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\BlockState.cs" />
+    <Compile Include="Model\ModelUtils.cs" />
+    <Compile Include="Model\Namespaces.cs" />
+    <Compile Include="Model\SegmentBrowser.cs" />
+    <Compile Include="Model\SegmentState.cs" />
     <Compile Include="opc.ua.client.cs" />
     <Compile Include="opc.ua.foundation.cs" />
     <Compile Include="opc.ua.server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="quickStart\ModelUtils.cs" />
     <Compile Include="quickStart\MonitoredNode.cs" />
     <Compile Include="quickStart\NodeHandle.cs" />
     <Compile Include="quickStart\QuickstartNodeManager.cs" />
+    <Compile Include="UnderlyingSystem\UnderlyingSystem.cs" />
+    <Compile Include="UnderlyingSystem\UnderlyingSystemBlock.cs" />
+    <Compile Include="UnderlyingSystem\UnderlyingSystemDataType.cs" />
+    <Compile Include="UnderlyingSystem\UnderlyingSystemSegment.cs" />
+    <Compile Include="UnderlyingSystem\UnderlyingSystemTag.cs" />
+    <Compile Include="UnderlyingSystem\UnderlyingSystemTagType.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

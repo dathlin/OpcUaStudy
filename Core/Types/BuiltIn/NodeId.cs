@@ -665,6 +665,8 @@ namespace Opc.Ua
                 }
 
                 // treat as a string identifier if a namespace was specified.
+                // 如果命名空间已经定义了，那么接下来的整个字符串都被当作文本标识来使用
+
                 if (namespaceIndex != 0)
                 {
                     return new NodeId(text, namespaceIndex);
@@ -823,8 +825,9 @@ namespace Opc.Ua
         }
 
         #endregion
+
         /// <summary>
-        /// Updates the namespace index.
+        /// 更新命名空间的索引，不涉及类型及其他
         /// </summary>
         internal void SetNamespaceIndex(ushort value)
         {
@@ -832,7 +835,7 @@ namespace Opc.Ua
         }
                                 
         /// <summary>
-        /// Updates the identifier.
+        /// 更新标识，需要同时指定标识类型和数据值
         /// </summary>
         internal void SetIdentifier(IdType idType, object value)
         {
@@ -842,12 +845,14 @@ namespace Opc.Ua
             {
                 case IdType.Opaque:
                 {
+                    //引用类型情况，需要完全的复制
                     m_identifier = Utils.Clone(value);
                     break;
                 }
 
                 default:
                 {
+                    //值类型的部分可以直接复制，无需担心是否会更改原引用
                     m_identifier = value;
                     break;
                 }
@@ -856,6 +861,7 @@ namespace Opc.Ua
         
         /// <summary>
         /// Updates the identifier.
+        /// 更新标识，此处针对的字符串形式的数据
         /// </summary>
         internal void SetIdentifier(string value, IdType idType)
         {

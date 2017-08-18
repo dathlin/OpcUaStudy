@@ -22,9 +22,10 @@ using System.ServiceModel;
 using System.Runtime.Serialization;
 
 namespace Opc.Ua
-{    
+{
     /// <summary>
     /// A class that stores the value of variable with an optional status code and timestamps.
+    /// 一个用可选状态代码和时间戳存储变量值的类
     /// </summary>
     /// <remarks>
     /// <para>

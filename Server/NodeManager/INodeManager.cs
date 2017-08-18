@@ -356,7 +356,7 @@ namespace Opc.Ua.Server
 
         /// <summary>
         /// Returns true if the node is in the view.
-        /// 
+        /// 如果该节点在视图里，就返回空
         /// </summary>
         bool IsNodeInView(OperationContext context, NodeId viewId, object nodeHandle);
     }

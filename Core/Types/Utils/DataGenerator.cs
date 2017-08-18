@@ -115,6 +115,7 @@ namespace Opc.Ua.Test
 
     /// <summary>
     /// A class that generates data.
+    /// 一个用于生成数据的类
     /// </summary>
     public class DataGenerator
     {

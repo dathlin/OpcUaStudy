@@ -25,6 +25,7 @@ namespace Opc.Ua
 {
     /// <summary>
     /// The base class for custom nodes.
+    /// 自定义节点的基类。
     /// </summary>
     public abstract class NodeState : IDisposable, IFormattable, ICloneable
     {
@@ -222,6 +223,7 @@ namespace Opc.Ua
         #region Public Properties
         /// <summary>
         /// An arbitrary handle associated with the node.
+        /// 与节点相关联的任意句柄
         /// </summary>
         public object Handle
         {
@@ -231,6 +233,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// What has changed in the node since <see cref="ClearChangeMasks"/> was last called.
+        /// 自ClearChangeMasks最后一次调用以来，节点发生了什么变化。
         /// </summary>
         /// <value>The change masks that indicates what has changed in a node.</value>
         public NodeStateChangeMasks ChangeMasks
@@ -241,6 +244,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// A symbolic name for the node that is not expected to be globally unique.
+        /// 不希望是全局唯一的节点的符号名称
         /// </summary>
         /// <value>The name of the symbolic.</value>
         /// <remarks>
@@ -254,6 +258,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The identifier for the node.
+        /// 节点身份标识
         /// </summary>
         /// <value>An instance that stores an identifier for a node in a server's address space.</value>
         public NodeId NodeId
@@ -276,6 +281,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The class for the node.
+        /// 该节点的类型，数值，还是方法，视图等等
         /// </summary>
         /// <value>The node class that is a description of the node.</value>
         public NodeClass NodeClass
@@ -3166,6 +3172,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Reads the value of an attribute.
+        /// 读取属性的值
         /// </summary>
         /// <param name="context">The context for the current operation.</param>
         /// <param name="attributeId">The attribute id.</param>
