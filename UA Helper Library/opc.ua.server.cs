@@ -12,13 +12,18 @@ namespace Opc.Ua.Hsl
     {
         #region 构造方法
 
-        public OpcUaServer()
+        public OpcUaServer(string url)
         {
             application.ApplicationType = ApplicationType.Server;
-            application.ConfigSectionName = "OpcUaHslServer";
 
             // load the application configuration.
-            application.LoadApplicationConfiguration(false);
+            //application.LoadApplicationConfiguration(false);
+
+
+            application.ApplicationConfiguration = GetDefaultConfiguration(url);
+
+
+            Initialization();
         }
 
 
@@ -30,16 +35,82 @@ namespace Opc.Ua.Hsl
             application.CheckApplicationInstanceCertificate(false, 0);
 
             // start the server.
+            
             application.Start(new DataAccessServer());
         }
 
+
+        private ApplicationConfiguration GetDefaultConfiguration(string url)
+        {
+            ApplicationConfiguration config = new ApplicationConfiguration();
+
+
+            config.ApplicationName = "OpcUaServer";
+            config.ApplicationType = ApplicationType.Server;
+            config.SecurityConfiguration = new SecurityConfiguration()
+            {
+                ApplicationCertificate = new CertificateIdentifier()
+                {
+                    StoreType = "Directory",
+                    StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\MachineDefault",
+                    SubjectName = config.ApplicationName,
+                },
+
+                TrustedPeerCertificates = new CertificateTrustList()
+                {
+                    StoreType = "Directory",
+                    StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\UA Applications",
+                },
+
+                TrustedIssuerCertificates = new CertificateTrustList()
+                {
+                    StoreType = "Directory",
+                    StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\UA Certificate Authorities",
+                },
+
+                RejectedCertificateStore = new CertificateStoreIdentifier()
+                {
+                    StoreType = "Directory",
+                    StorePath = @"% CommonApplicationData%\OPC Foundation\CertificateStores\RejectedCertificates"
+                }
+            };
+            config.TransportConfigurations = new TransportConfigurationCollection();
+            config.TransportQuotas = new TransportQuotas();
+            config.ServerConfiguration = new ServerConfiguration()
+            {
+                BaseAddresses = new string[]
+                {
+                     url
+                },
+            };
+            config.TraceConfiguration = new TraceConfiguration()
+            {
+                OutputFilePath = @"Logs\opc.ua.server.log.txt",
+                DeleteOnLoad = true,
+                TraceMasks = 515
+            };
+
+            config.CertificateValidator = new CertificateValidator();
+            config.CertificateValidator.Update(config);
+            config.Extensions = new XmlElementCollection();
+
+            return config;
+        }
 
         #endregion
 
 
         private ApplicationInstance application = new ApplicationInstance();
+        
+        public ApplicationInstance AppInstance
+        {
+            get { return application; }
+        }
 
-
+        public ApplicationConfiguration AppConfig
+        {
+            get { return application.ApplicationConfiguration; }
+        }
     }
 
     /// <summary>
@@ -64,6 +135,7 @@ namespace Opc.Ua.Hsl
         #region Public Interface
         /// <summary>
         /// Returns the current server instance.
+        /// 返回当前的服务器实例
         /// </summary>
         public IServerInternal ServerInstance
         {
@@ -74,6 +146,7 @@ namespace Opc.Ua.Hsl
         #region Overridden Methods
         /// <summary>
         /// Creates the node managers for the server.
+        /// 创建服务器的节点管理器
         /// </summary>
         /// <remarks>
         /// This method allows the sub-class create any additional node managers which it uses. The SDK

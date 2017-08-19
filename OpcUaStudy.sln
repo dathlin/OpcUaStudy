@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsAppClient", "WindowsFormsAppClient\WindowsFormsAppClient.csproj", "{6D3E5E5A-B856-48ED-832E-6407EF5640FE}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UA Client Controls", "Controls\UA Client Controls.csproj", "{A247D2EE-14FC-463D-A9BA-6CFF1EF22B7A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UA Helper Library", "UA Helper Library\UA Helper Library.csproj", "{04BF3274-2158-48C7-963D-1EA22109E6FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsAppServer", "WindowsFormsAppServer\WindowsFormsAppServer.csproj", "{2D5004EC-30B5-4A93-86F1-6B3BE38C9281}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,8 +59,15 @@ Global
 		{04BF3274-2158-48C7-963D-1EA22109E6FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04BF3274-2158-48C7-963D-1EA22109E6FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04BF3274-2158-48C7-963D-1EA22109E6FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D5004EC-30B5-4A93-86F1-6B3BE38C9281}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D5004EC-30B5-4A93-86F1-6B3BE38C9281}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D5004EC-30B5-4A93-86F1-6B3BE38C9281}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D5004EC-30B5-4A93-86F1-6B3BE38C9281}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB9E2B06-0BB6-4016-B631-3A0B7A8D689B}
 	EndGlobalSection
 EndGlobal

@@ -20,6 +20,7 @@ namespace Opc.Ua
 {
     /// <summary>
     /// Stores the type tree for a server. 
+    /// 存储服务器的类型树
     /// </summary>
     public class TypeTable : ITypeTable
     {
@@ -755,6 +756,7 @@ namespace Opc.Ua
         #region TypeInfo Class
         /// <summary>
         /// Stores the information about an indexed type.
+        /// 存储有关索引类型的信息
         /// </summary>
         private class TypeInfo
         {
@@ -767,6 +769,7 @@ namespace Opc.Ua
 
             /// <summary>
             /// Checks if the type is a subtype of the specified node.
+            /// 检查类型是否是指定节点的子类型
             /// </summary>
             /// <param name="nodeId">The node identifier.</param>
             /// <returns>
