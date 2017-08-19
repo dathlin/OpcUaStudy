@@ -8,36 +8,43 @@ using System.Threading.Tasks;
 
 namespace Opc.Ua.Hsl
 {
+    /// <summary>
+    /// 一个OPC UA的服务器对象
+    /// </summary>
     public class OpcUaServer
     {
         #region 构造方法
 
+        /// <summary>
+        /// 实例化一个 <see cref="OpcUaServer"/> 对象
+        /// </summary>
+        /// <param name="url"></param>
         public OpcUaServer(string url)
         {
-            application.ApplicationType = ApplicationType.Server;
+
+            m_application = new ApplicationInstance();
+
+            m_application.ApplicationType = ApplicationType.Server;
 
             // load the application configuration.
             //application.LoadApplicationConfiguration(false);
 
 
-            application.ApplicationConfiguration = GetDefaultConfiguration(url);
-
-
-            Initialization();
-        }
-
-
-        private void Initialization()
-        {
+            m_application.ApplicationConfiguration = GetDefaultConfiguration(url);
 
 
             // check the application certificate.
-            application.CheckApplicationInstanceCertificate(false, 0);
+            m_application.CheckApplicationInstanceCertificate(false, 0);
 
             // start the server.
-            
-            application.Start(new DataAccessServer());
+
+            m_server = new DataAccessServer();
+
+            m_application.Start(m_server);
+            m_configuration = m_application.ApplicationConfiguration;
         }
+
+        
 
 
         private ApplicationConfiguration GetDefaultConfiguration(string url)
@@ -47,6 +54,13 @@ namespace Opc.Ua.Hsl
 
             config.ApplicationName = "OpcUaServer";
             config.ApplicationType = ApplicationType.Server;
+
+            config.TraceConfiguration = new TraceConfiguration()
+            {
+                OutputFilePath = @"Logs\opc.ua.server.log.txt",
+                DeleteOnLoad = true,
+                TraceMasks = 515
+            };
             config.SecurityConfiguration = new SecurityConfiguration()
             {
                 ApplicationCertificate = new CertificateIdentifier()
@@ -83,12 +97,7 @@ namespace Opc.Ua.Hsl
                      url
                 },
             };
-            config.TraceConfiguration = new TraceConfiguration()
-            {
-                OutputFilePath = @"Logs\opc.ua.server.log.txt",
-                DeleteOnLoad = true,
-                TraceMasks = 515
-            };
+
 
             config.CertificateValidator = new CertificateValidator();
             config.CertificateValidator.Update(config);
@@ -99,17 +108,23 @@ namespace Opc.Ua.Hsl
 
         #endregion
 
-
-        private ApplicationInstance application = new ApplicationInstance();
+        private ApplicationInstance m_application;
+        private StandardServer m_server;
+        private ApplicationConfiguration m_configuration;
         
+        /// <summary>
+        /// 应用程序的实例
+        /// </summary>
         public ApplicationInstance AppInstance
         {
-            get { return application; }
+            get { return m_application; }
         }
-
+        /// <summary>
+        /// 应用程序的配置
+        /// </summary>
         public ApplicationConfiguration AppConfig
         {
-            get { return application.ApplicationConfiguration; }
+            get { return m_application.ApplicationConfiguration; }
         }
     }
 
@@ -201,12 +216,14 @@ namespace Opc.Ua.Hsl
         #region Constructors
         /// <summary>
         /// Initializes the node manager.
+        /// 初始化该节点管理器
         /// </summary>
         public DataAccessServerNodeManager(IServerInternal server, ApplicationConfiguration configuration)
         :
             base(server, configuration, Namespaces.DataAccess)
         {
             this.AliasRoot = "DA";
+            
 
             SystemContext.SystemHandle = m_system = new UnderlyingSystem();
             SystemContext.NodeIdFactory = this;
@@ -228,6 +245,7 @@ namespace Opc.Ua.Hsl
         #region IDisposable Members
         /// <summary>
         /// An overrideable version of the Dispose.
+        /// 释放方法的重载版本
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -241,6 +259,7 @@ namespace Opc.Ua.Hsl
         #region INodeIdFactory Members
         /// <summary>
         /// Creates the NodeId for the specified node.
+        /// 创建指定节点的NodeId
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="node">The node.</param>
@@ -251,6 +270,11 @@ namespace Opc.Ua.Hsl
         /// have NodeIds assigned to them. This implementation constructs NodeIds by constructing
         /// strings. Other implementations could assign unique integers or Guids and save the new
         /// Node in a dictionary for later lookup.
+        /// 
+        /// 该方法由NodeState.Create（）方法调用，该方法从类型模型初始化一个节点。 
+        /// 在初始化期间，创建了许多子节点，并且需要将NodeIds分配给它们。 此实现通过构造字符串来构造NodeIds。 
+        /// 其他实现可以分配唯一的整数或Guid并将新节点保存在字典中以供以后查找。
+        /// 
         /// </remarks>
         public override NodeId New(ISystemContext context, NodeState node)
         {
@@ -261,11 +285,15 @@ namespace Opc.Ua.Hsl
         #region INodeManager Members
         /// <summary>
         /// Does any initialization required before the address space can be used.
+        /// 在使用地址空间之前需要进行一些初始化
         /// </summary>
         /// <remarks>
         /// The externalReferences is an out parameter that allows the node manager to link to nodes
         /// in other node managers. For example, the 'Objects' node is managed by the CoreNodeManager and
-        /// should have a reference to the root folder node(s) exposed by this node manager.  
+        /// should have a reference to the root folder node(s) exposed by this node manager.
+        /// 
+        /// externalReferences是一个out参数，允许节点管理器链接到其他节点管理器中的节点。
+        /// 例如，“对象”节点由CoreNodeManager管理，并且应该具有对该节点管理器公开的根文件夹节点的引用。
         /// </remarks>
         public override void CreateAddressSpace(IDictionary<NodeId, IList<IReference>> externalReferences)
         {
@@ -300,6 +328,7 @@ namespace Opc.Ua.Hsl
 
         /// <summary>
         /// Frees any resources allocated for the address space.
+        /// 释放分配给地址空间的任何资源
         /// </summary>
         public override void DeleteAddressSpace()
         {
@@ -312,6 +341,7 @@ namespace Opc.Ua.Hsl
 
         /// <summary>
         /// Returns a unique handle for the node.
+        /// 返回节点的唯一句柄
         /// </summary>
         protected override NodeHandle GetManagerHandle(ServerSystemContext context, NodeId nodeId, IDictionary<NodeId, NodeState> cache)
         {
@@ -374,6 +404,7 @@ namespace Opc.Ua.Hsl
 
         /// <summary>
         /// Verifies that the specified node exists.
+        /// 验证指定的节点是否存在
         /// </summary>
         protected override NodeState ValidateNode(
             ServerSystemContext context,
@@ -511,15 +542,14 @@ namespace Opc.Ua.Hsl
         #region Overridden Methods
         /// <summary>
         /// Called after creating a MonitoredItem.
+        /// 创建MonitoredItem后调用
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="handle">The handle for the node.</param>
         /// <param name="monitoredItem">The monitored item.</param>
         protected override void OnMonitoredItemCreated(ServerSystemContext context, NodeHandle handle, MonitoredItem monitoredItem)
         {
-            BlockState block = handle.Node.GetHierarchyRoot() as BlockState;
-
-            if (block != null)
+            if (handle.Node.GetHierarchyRoot() is BlockState block)
             {
                 block.StartMonitoring(context);
 
@@ -530,6 +560,7 @@ namespace Opc.Ua.Hsl
 
         /// <summary>
         /// Called after deleting a MonitoredItem.
+        /// 删除MonitoredItem后调用
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="handle">The handle for the node.</param>

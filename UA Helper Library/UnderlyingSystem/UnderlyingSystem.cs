@@ -108,36 +108,8 @@ namespace Opc.Ua.Hsl
         /// </remarks>
         private string[] s_BlockPathDatabase = new string[]
         {
-            "Factory/East/Boiler1/Pipe1001",
-            "Factory/East/Boiler1/Drum1002",
-            "Factory/East/Boiler1/Pipe1002",
-            "Factory/East/Boiler1/FC1001",
-            "Factory/East/Boiler1/LC1001",
-            "Factory/East/Boiler1/CC1001",
-            "Factory/West/Boiler2/Pipe2001",
-            "Factory/West/Boiler2/Drum2002",
-            "Factory/West/Boiler2/Pipe2002",
-            "Factory/West/Boiler2/FC2001",
-            "Factory/West/Boiler2/LC2001",
-            "Factory/West/Boiler2/CC2001",
-            "Assets/Sensors/Flow/Pipe1001",
-            "Assets/Sensors/Level/Drum1002",
-            "Assets/Sensors/Flow/Pipe1002",
-            "Assets/Controllers/Flow/FC1001",
-            "Assets/Controllers/Level/LC1001",
-            "Assets/Controllers/Custom/CC1001",
-            "Assets/Sensors/Flow/Pipe2001",
-            "Assets/Sensors/Level/Drum2002",
-            "Assets/Sensors/Flow/Pipe2002",
-            "Assets/Controllers/Flow/FC2001",
-            "Assets/Controllers/Level/LC2001",
-            "Assets/Controllers/Custom/CC2001",
-            "TestData/Static/FC1001",
-            "TestData/Static/LC1001",
-            "TestData/Static/CC1001",
-            "TestData/Static/FC2001",
-            "TestData/Static/LC2001",
-            "TestData/Static/CC2001"
+            "Devices/Device A",
+            "Devices/Device B",
         };
 
         /// <summary>
@@ -159,18 +131,8 @@ namespace Opc.Ua.Hsl
         /// </remarks>
         private string[] s_BlockDatabase = new string[]
         {
-            "Pipe1001/FlowSensor",
-            "Drum1002/LevelSensor",
-            "Pipe1002/FlowSensor",
-            "Pipe2001/FlowSensor",
-            "Drum2002/LevelSensor",
-            "Pipe2002/FlowSensor",
-            "FC1001/Controller",
-            "LC1001/Controller",
-            "CC1001/CustomController",
-            "FC2001/Controller",
-            "LC2001/Controller",
-            "CC2001/CustomController"
+            "Device A/Machine",
+            "Device B/Machine",
         };
 
         /// <summary>
@@ -308,6 +270,7 @@ namespace Opc.Ua.Hsl
 
         /// <summary>
         /// Finds the blocks belonging to the specified segment.
+        /// 查找属于指定段的块
         /// </summary>
         /// <param name="segmentPath">The path to the segment to search.</param>
         /// <returns>The list of blocks found. Null if the segment path does not exist.</returns>
@@ -413,6 +376,7 @@ namespace Opc.Ua.Hsl
 
         /// <summary>
         /// Finds a block.
+        /// 找到一个块
         /// </summary>
         /// <param name="blockId">The block identifier.</param>
         /// <returns>The block.</returns>
@@ -462,6 +426,8 @@ namespace Opc.Ua.Hsl
                     return null;
                 }
 
+
+
                 // create a new block.
                 block = new UnderlyingSystemBlock();
 
@@ -477,35 +443,12 @@ namespace Opc.Ua.Hsl
                 // the node manager will need to map these types to UA defined types.
                 switch (block.BlockType)
                 {
-                    case "FlowSensor":
+                    case "Machine":
                         {
-                            block.CreateTag("Measurement", UnderlyingSystemDataType.Real4, UnderlyingSystemTagType.Analog, "liters/sec", false);
-                            block.CreateTag("Online", UnderlyingSystemDataType.Integer1, UnderlyingSystemTagType.Digital, null, false);
-                            break;
-                        }
-
-                    case "LevelSensor":
-                        {
-                            block.CreateTag("Measurement", UnderlyingSystemDataType.Real4, UnderlyingSystemTagType.Analog, "liters", false);
-                            block.CreateTag("Online", UnderlyingSystemDataType.Integer1, UnderlyingSystemTagType.Digital, null, false);
-                            break;
-                        }
-
-                    case "Controller":
-                        {
-                            block.CreateTag("SetPoint", UnderlyingSystemDataType.Real4, UnderlyingSystemTagType.Normal, null, true);
-                            block.CreateTag("Measurement", UnderlyingSystemDataType.Real4, UnderlyingSystemTagType.Normal, null, false);
-                            block.CreateTag("Output", UnderlyingSystemDataType.Real4, UnderlyingSystemTagType.Normal, null, false);
-                            block.CreateTag("Status", UnderlyingSystemDataType.Integer4, UnderlyingSystemTagType.Enumerated, null, false);
-                            break;
-                        }
-
-                    case "CustomController":
-                        {
-                            block.CreateTag("Input1", UnderlyingSystemDataType.Real4, UnderlyingSystemTagType.Normal, null, true);
-                            block.CreateTag("Input2", UnderlyingSystemDataType.Real4, UnderlyingSystemTagType.Normal, null, true);
-                            block.CreateTag("Input3", UnderlyingSystemDataType.Real4, UnderlyingSystemTagType.Normal, null, true);
-                            block.CreateTag("Output", UnderlyingSystemDataType.Real4, UnderlyingSystemTagType.Normal, null, false);
+                            block.CreateTag("Name", UnderlyingSystemDataType.String, UnderlyingSystemTagType.Normal, null, true);
+                            block.CreateTag("IsFault", UnderlyingSystemDataType.Boolean, UnderlyingSystemTagType.Digital, null, true);
+                            block.CreateTag("TestValue", UnderlyingSystemDataType.Int32, UnderlyingSystemTagType.Analog, null, true);
+                            block.CreateTag("AlarmTime", UnderlyingSystemDataType.DateTime, UnderlyingSystemTagType.Normal, null, true);
                             break;
                         }
                 }

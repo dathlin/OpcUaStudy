@@ -112,6 +112,7 @@ namespace Opc.Ua.Hsl
         {
             // 新建标签
 
+
             UnderlyingSystemTag tag = new UnderlyingSystemTag()
             {
                 Block = this,
@@ -124,6 +125,8 @@ namespace Opc.Ua.Hsl
                 Labels = null,
                 EuRange = null
             };
+
+            
             switch (tagType)
             {
                 case UnderlyingSystemTagType.Analog:
@@ -165,6 +168,20 @@ namespace Opc.Ua.Hsl
                 case UnderlyingSystemDataType.Integer4: { tag.Value = 0; break; }
                 case UnderlyingSystemDataType.Real4: { tag.Value = (float)0; break; }
                 case UnderlyingSystemDataType.String: { tag.Value = String.Empty; break; }
+                case UnderlyingSystemDataType.Boolean: { tag.Value = false; break; }
+                case UnderlyingSystemDataType.Byte: { tag.Value = (byte)0; break; }
+                case UnderlyingSystemDataType.SByte: { tag.Value = (sbyte)0; break; }
+                case UnderlyingSystemDataType.Int16: { tag.Value = (short)0; break; }
+                case UnderlyingSystemDataType.UInt16: { tag.Value = (ushort)0; break; }
+                case UnderlyingSystemDataType.Int32: { tag.Value = 0; break; }
+                case UnderlyingSystemDataType.UInt32: { tag.Value = (uint)0; break; }
+                case UnderlyingSystemDataType.Int64: { tag.Value = (long)0; break; }
+                case UnderlyingSystemDataType.UInt64: { tag.Value = (ulong)0; break; }
+                case UnderlyingSystemDataType.Float: { tag.Value = (float)0; break; }
+                case UnderlyingSystemDataType.Double: { tag.Value = (double)0; break; }
+                case UnderlyingSystemDataType.Decimal128: { tag.Value = (decimal)0; break; }
+                case UnderlyingSystemDataType.DateTime: { tag.Value = DateTime.Now; break; }
+                case UnderlyingSystemDataType.Guid: { tag.Value = Guid.NewGuid(); break; }
             }
 
             lock (m_tags)
@@ -266,6 +283,90 @@ namespace Opc.Ua.Hsl
                         case UnderlyingSystemDataType.String:
                             {
                                 tag.Value = (string)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.Boolean:
+                            {
+                                tag.Value = (Boolean)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.Byte:
+                            {
+                                tag.Value = (byte)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.SByte:
+                            {
+                                tag.Value = (sbyte)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.Int16:
+                            {
+                                tag.Value = (short)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.UInt16:
+                            {
+                                tag.Value = (ushort)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.Int32:
+                            {
+                                tag.Value = (int)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.UInt32:
+                            {
+                                tag.Value = (uint)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.Int64:
+                            {
+                                tag.Value = (long)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.UInt64:
+                            {
+                                tag.Value = (ulong)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.Float:
+                            {
+                                tag.Value = (float)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.Double:
+                            {
+                                tag.Value = (double)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.Decimal128:
+                            {
+                                tag.Value = (decimal)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.DateTime:
+                            {
+                                tag.Value = (DateTime)value;
+                                break;
+                            }
+
+                        case UnderlyingSystemDataType.Guid:
+                            {
+                                tag.Value = (Guid)value;
                                 break;
                             }
                     }

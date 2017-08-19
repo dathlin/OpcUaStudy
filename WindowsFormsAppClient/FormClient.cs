@@ -70,8 +70,8 @@ namespace WindowsFormsAppClient
         private void button2_Click(object sender, EventArgs e)
         {
             DateTime dt = DateTime.Now;
-            string value = client.ReadNode<string>("ns=2;s=Devices/Device B/Name");
-
+            //string value = client.ReadNode<string>("ns=2;s=Devices/Device B/Name");
+            string value = client.ReadNode<string>("ns=2;s=1:Device B?Name");
             TimeSpan ts = DateTime.Now - dt;
             textBox2.AppendText("value: " + value + "   time: " + ts.TotalMilliseconds + "ms" + Environment.NewLine);
         }
@@ -84,14 +84,15 @@ namespace WindowsFormsAppClient
         private void button3_Click(object sender, EventArgs e)
         {
             DateTime dt = DateTime.Now;
-            bool result=client.WriteNode("ns=2;s=Devices/Device B/Name",Guid.NewGuid().ToString("N"));
+            //bool result=client.WriteNode("s=Devices/Device B/Name",Guid.NewGuid().ToString("N"));
+            bool result = client.WriteNode("ns=2;s=1:Device B?Name", Guid.NewGuid().ToString("N"));
             TimeSpan ts = DateTime.Now - dt;
             textBox2.AppendText("value: " + result.ToString() + "   time: " + ts.TotalMilliseconds + "ms" + Environment.NewLine);
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            client.MonitorValue<string>("ns=2;s=Devices/Device B/Name", (m, unsubscribe) =>
+            client.MonitorValue<string>("s=Devices/Device B/Name", (m, unsubscribe) =>
              {
                  textBox2.BeginInvoke(new Action(() => {
                      textBox2.AppendText("value: " + m + Environment.NewLine);

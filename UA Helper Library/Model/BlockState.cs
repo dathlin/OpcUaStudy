@@ -316,6 +316,20 @@ namespace Opc.Ua.Hsl
                 case UnderlyingSystemDataType.Integer4: { variable.DataType = DataTypes.Int32; break; }
                 case UnderlyingSystemDataType.Real4: { variable.DataType = DataTypes.Float; break; }
                 case UnderlyingSystemDataType.String: { variable.DataType = DataTypes.String; break; }
+                case UnderlyingSystemDataType.Boolean: { variable.DataType = DataTypes.Boolean; break; }
+                case UnderlyingSystemDataType.Byte: { variable.DataType = DataTypes.Byte; break; }
+                case UnderlyingSystemDataType.SByte: { variable.DataType = DataTypes.SByte; break; }
+                case UnderlyingSystemDataType.Int16: { variable.DataType = DataTypes.Int16; break; }
+                case UnderlyingSystemDataType.UInt16: { variable.DataType = DataTypes.UInt16; break; }
+                case UnderlyingSystemDataType.Int32: { variable.DataType = DataTypes.Int32; break; }
+                case UnderlyingSystemDataType.UInt32: { variable.DataType = DataTypes.UInt32; break; }
+                case UnderlyingSystemDataType.Int64: { variable.DataType = DataTypes.Int64; break; }
+                case UnderlyingSystemDataType.UInt64: { variable.DataType = DataTypes.UInt64; break; }
+                case UnderlyingSystemDataType.Float: { variable.DataType = DataTypes.Float; break; }
+                case UnderlyingSystemDataType.Double: { variable.DataType = DataTypes.Double; break; }
+                case UnderlyingSystemDataType.Decimal128: { variable.DataType = DataTypes.Decimal128; break; }
+                case UnderlyingSystemDataType.DateTime: { variable.DataType = DataTypes.DateTime; break; }
+                case UnderlyingSystemDataType.Guid: { variable.DataType = DataTypes.Guid; break; }
             }
 
             variable.ValueRank = ValueRanks.Scalar;

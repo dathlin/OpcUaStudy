@@ -67,5 +67,62 @@ namespace Opc.Ua.Hsl
         /// 一个字符串数据
         /// </summary>
         String = 4,
+
+        /// <summary>
+        /// Bool型数据
+        /// </summary>
+        Boolean=5,
+        /// <summary>
+        /// 有符号的字节数据
+        /// </summary>
+        SByte=6,
+        /// <summary>
+        /// 无符号的字节数据
+        /// </summary>
+        Byte=7,
+        /// <summary>
+        /// 有符号的16位整型数据
+        /// </summary>
+        Int16=8,
+        /// <summary>
+        /// 无符号的16位整型数据
+        /// </summary>
+        UInt16=9,
+        /// <summary>
+        /// 有符号的32位整型数据
+        /// </summary>
+        Int32=10,
+        /// <summary>
+        /// 无符号的32位整型数据
+        /// </summary>
+        UInt32=11,
+        /// <summary>
+        /// 有符号的64位整型数据
+        /// </summary>
+        Int64=12,
+        /// <summary>
+        /// 无符号的64位整型数据
+        /// </summary>
+        UInt64=13,
+        /// <summary>
+        /// 单精度的浮点数
+        /// </summary>
+        Float=14,
+        /// <summary>
+        /// 双精度的浮点数
+        /// </summary>
+        Double=15,
+        /// <summary>
+        /// 时间数据
+        /// </summary>
+        DateTime=16,
+        /// <summary>
+        /// GUID数据
+        /// </summary>
+        Guid=17,
+        /// <summary>
+        /// 128位高精度浮点数
+        /// </summary>
+        Decimal128=18
     }
 }
