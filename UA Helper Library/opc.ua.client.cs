@@ -238,7 +238,8 @@ namespace Opc.Ua.Hsl
 
             // 触发一个事件
             DoConnectComplete(null);
-            
+
+            PostInitializeSession();
         }
 
 
@@ -303,6 +304,7 @@ namespace Opc.Ua.Hsl
         {
             m_configuration.TraceConfiguration.OutputFilePath = @"Logs\OpcUaHslClientLog.txt";
             m_configuration.TraceConfiguration.DeleteOnLoad = true;
+            m_configuration.TraceConfiguration.TraceMasks = 515;
         }
         
 
@@ -587,8 +589,22 @@ namespace Opc.Ua.Hsl
             }
         }
 
-        #endregion
         
+
+        private void PostInitializeSession()
+        {
+            var node = m_session.NodeCache.Find(ObjectIds.ObjectsFolder);
+            RootNode = new NodeId(node.NodeId.ToString());
+        }
+
+
+        /// <summary>
+        /// Gets the root node of the server
+        /// </summary>
+        private NodeId RootNode { get; set; }
+
+        #endregion
+
         #region 公开的读写操作
 
         /// <summary>
@@ -599,6 +615,7 @@ namespace Opc.Ua.Hsl
         /// <returns></returns>
         public T ReadNode<T>(string url)
         {
+
             ReadValueId nodeToRead = new ReadValueId()
             {
                 NodeId = new NodeId(url),
@@ -809,8 +826,11 @@ namespace Opc.Ua.Hsl
 
 
         #endregion
-        
+
         #region 私有对象
+
+        private readonly IDictionary<string, NodeId> _nodesCache = new Dictionary<string, NodeId>();
+        private readonly IDictionary<string, IList<NodeId>> _folderCache = new Dictionary<string, IList<NodeId>>();
 
         private ApplicationInstance application = new ApplicationInstance();
 

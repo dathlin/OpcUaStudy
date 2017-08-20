@@ -45,12 +45,12 @@ namespace Opc.Ua.Hsl
         }
 
         
-
+        
 
         private ApplicationConfiguration GetDefaultConfiguration(string url)
         {
             ApplicationConfiguration config = new ApplicationConfiguration();
-
+            
 
             config.ApplicationName = "OpcUaServer";
             config.ApplicationType = ApplicationType.Server;
@@ -125,6 +125,79 @@ namespace Opc.Ua.Hsl
         public ApplicationConfiguration AppConfig
         {
             get { return m_application.ApplicationConfiguration; }
+        }
+
+
+        /// <summary>
+        /// 格式依据服务器的标准来指定
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url">格式</param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool WriteNode<T>(string url, T value)
+        {
+            WriteValue valueToWrite = new WriteValue()
+            {
+                NodeId = new NodeId(url),
+                AttributeId = Attributes.Value
+            };
+            valueToWrite.Value.Value = value;
+            valueToWrite.Value.StatusCode = StatusCodes.Good;
+            valueToWrite.Value.ServerTimestamp = DateTime.MinValue;
+            valueToWrite.Value.SourceTimestamp = DateTime.MinValue;
+
+            WriteValueCollection valuesToWrite = new WriteValueCollection
+            {
+                valueToWrite
+            };
+
+            // 写入当前的值
+
+            m_server.Write(
+                null,
+                valuesToWrite,
+                out StatusCodeCollection results,
+                out DiagnosticInfoCollection diagnosticInfos);
+
+            ClientBase.ValidateResponse(results, valuesToWrite);
+            ClientBase.ValidateDiagnosticInfos(diagnosticInfos, valuesToWrite);
+
+            return !StatusCode.IsBad(results[0]);
+        }
+
+        /// <summary>
+        /// 格式依据服务器的标准来指定
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public T ReadNode<T>(string url)
+        {
+
+            ReadValueId nodeToRead = new ReadValueId()
+            {
+                NodeId = new NodeId(url),
+                AttributeId = Attributes.Value
+            };
+            ReadValueIdCollection nodesToRead = new ReadValueIdCollection
+            {
+                nodeToRead
+            };
+
+            // 读取当前的值
+            m_server.Read(
+                null,
+                0,
+                TimestampsToReturn.Neither,
+                nodesToRead,
+                out DataValueCollection results,
+                out DiagnosticInfoCollection diagnosticInfos);
+
+            ClientBase.ValidateResponse(results, nodesToRead);
+            ClientBase.ValidateDiagnosticInfos(diagnosticInfos, nodesToRead);
+
+            return (T)results[0].Value;
         }
     }
 

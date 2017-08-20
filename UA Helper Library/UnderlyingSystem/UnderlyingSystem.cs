@@ -446,8 +446,9 @@ namespace Opc.Ua.Hsl
                     case "Machine":
                         {
                             block.CreateTag("Name", UnderlyingSystemDataType.String, UnderlyingSystemTagType.Normal, null, true);
-                            block.CreateTag("IsFault", UnderlyingSystemDataType.Boolean, UnderlyingSystemTagType.Digital, null, true);
-                            block.CreateTag("TestValue", UnderlyingSystemDataType.Int32, UnderlyingSystemTagType.Analog, null, true);
+                            block.CreateTag("IsFault", UnderlyingSystemDataType.Boolean, UnderlyingSystemTagType.Normal, null, true);
+                            block.CreateTag("TestValueInt", UnderlyingSystemDataType.Int32, UnderlyingSystemTagType.Analog, null, true);
+                            block.CreateTag("TestValueFloat", UnderlyingSystemDataType.Float, UnderlyingSystemTagType.Normal, null, true);
                             block.CreateTag("AlarmTime", UnderlyingSystemDataType.DateTime, UnderlyingSystemTagType.Normal, null, true);
                             break;
                         }

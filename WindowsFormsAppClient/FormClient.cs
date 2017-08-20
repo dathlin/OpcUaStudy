@@ -92,7 +92,7 @@ namespace WindowsFormsAppClient
 
         private void button4_Click(object sender, EventArgs e)
         {
-            client.MonitorValue<string>("s=Devices/Device B/Name", (m, unsubscribe) =>
+            client.MonitorValue<string>("ns=2;s=1:Device B?Name", (m, unsubscribe) =>
              {
                  textBox2.BeginInvoke(new Action(() => {
                      textBox2.AppendText("value: " + m + Environment.NewLine);
