@@ -33,7 +33,7 @@ namespace WindowsFormsAppServer
 
         private void writeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            server.WriteNode("ns=2;s=1:Device B?Name", Guid.NewGuid().ToString("N"));
+            //server.WriteNode("ns=2;s=1:Device B?Name", Guid.NewGuid().ToString("N"));
         }
     }
 }

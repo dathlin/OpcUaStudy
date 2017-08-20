@@ -4446,13 +4446,14 @@ namespace Opc.Ua
         #endregion
     }
     #endregion
-    #endif
+#endif
     #endregion
 
     #region RequestHeader Class
-    #if (!OPCUA_EXCLUDE_RequestHeader)
+#if (!OPCUA_EXCLUDE_RequestHeader)
     /// <summary>
     /// The header passed with every server request.
+    /// 标头随每个服务器请求一起传递
     /// </summary>
     /// <exclude />
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
@@ -4462,6 +4463,7 @@ namespace Opc.Ua
         #region Constructors
         /// <summary>
         /// The default constructor.
+        /// 默认的构造器
         /// </summary>
         public RequestHeader()
         {
@@ -4470,6 +4472,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Called by the .NET framework during deserialization.
+        /// 在反序列化期间由.NET框架调用
         /// </summary>
         [OnDeserializing]
         private void Initialize(StreamingContext context)
@@ -4479,6 +4482,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Sets private members to default values.
+        /// 将私有成员设置为默认值
         /// </summary>
         private void Initialize()
         {
@@ -4495,6 +4499,7 @@ namespace Opc.Ua
         #region Public Properties
         /// <summary>
         /// The authentication token for the current session.
+        /// 当前会话的身份验证令牌
         /// </summary>
         [DataMember(Name = "AuthenticationToken", IsRequired = false, Order = 1)]
         public NodeId AuthenticationToken
@@ -4505,6 +4510,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// When the request was sent by the client.
+        /// 当请求由客户端发送时
         /// </summary>
         [DataMember(Name = "Timestamp", IsRequired = false, Order = 2)]
         public DateTime Timestamp
@@ -4515,6 +4521,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// A handle assigned by the client to the request. It is returned in the response.
+        /// 由客户端分配给该请求的句柄。 在响应中返回
         /// </summary>
         [DataMember(Name = "RequestHandle", IsRequired = false, Order = 3)]
         public uint RequestHandle
@@ -4525,6 +4532,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// A mask indicating what diagnostic information should be returned in the response.
+        /// 指示响应中应返回哪些诊断信息的掩码
         /// </summary>
         [DataMember(Name = "ReturnDiagnostics", IsRequired = false, Order = 4)]
         public uint ReturnDiagnostics
@@ -4535,6 +4543,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Identifies an entry in the client audit log.
+        /// 标识客户端审核日志中的条目
         /// </summary>
         [DataMember(Name = "AuditEntryId", IsRequired = false, Order = 5)]
         public string AuditEntryId
@@ -4545,6 +4554,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The timeout for the operation specified by the client.
+        /// 由客户端指定的操作超时
         /// </summary>
         [DataMember(Name = "TimeoutHint", IsRequired = false, Order = 6)]
         public uint TimeoutHint
@@ -4555,6 +4565,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Allows vendor specific information to be included in the header.
+        /// 允许供应商的具体信息包含在标题中
         /// </summary>
         [DataMember(Name = "AdditionalHeader", IsRequired = false, Order = 7)]
         public ExtensionObject AdditionalHeader

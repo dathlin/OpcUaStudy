@@ -441,6 +441,10 @@ namespace Opc.Ua.Hsl
                 // add the tags based on the block type.
                 // note that the block and tag types used here are types defined by the underlying system.
                 // the node manager will need to map these types to UA defined types.
+
+                // 根据块类型添加标签。 请注意，这里使用的块和标签类型是由底层系统定义的类型。 
+                // 节点管理器将需要将这些类型映射到UA定义的类型。
+
                 switch (block.BlockType)
                 {
                     case "Machine":
