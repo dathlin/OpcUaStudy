@@ -2266,6 +2266,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The certificate's subject name - the distinguished name of an X509 certificate.
+        /// 证书的主题名称 - 用于分辨不同的X509证书
         /// </summary>
         /// <value>
         /// The distinguished name of an X509 certificate acording to the Abstract Syntax Notation One (ASN.1) syntax.

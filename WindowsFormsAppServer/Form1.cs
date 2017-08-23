@@ -21,7 +21,7 @@ namespace WindowsFormsAppServer
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            server = new OpcUaServer("opc.tcp://localhost:13567/OpcUaServer");
+            server = new OpcUaServer("http://117.48.203.204:13567/OpcUaServer");
             StandardServer server2 = server.AppInstance.Server as StandardServer;
             serverDiagnosticsCtrl1.Initialize(server2, server.AppConfig);
         }

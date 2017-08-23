@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Opc.Ua.Hsl
 {
@@ -59,7 +60,7 @@ namespace Opc.Ua.Hsl
 
             if (!string.IsNullOrEmpty(application.ApplicationConfiguration.ApplicationName))
                 application.ApplicationName = application.ApplicationConfiguration.ApplicationName;
-            
+
 
             m_CertificateValidation = new CertificateValidationEventHandler(CertificateValidator_CertificateValidation);
             
@@ -343,7 +344,8 @@ namespace Opc.Ua.Hsl
                 {
                     StoreType = "Directory",
                     StorePath = @"% CommonApplicationData%\OPC Foundation\CertificateStores\RejectedCertificates"
-                }
+                },
+                AutoAcceptUntrustedCertificates = true,
             };
             config.SecurityConfiguration = sConfig;
 
@@ -580,7 +582,17 @@ namespace Opc.Ua.Hsl
 
                 if (!m_configuration.SecurityConfiguration.AutoAcceptUntrustedCertificates)
                 {
-                    e.Accept = true;
+                    //e.Accept = true;
+                    if (!m_configuration.SecurityConfiguration.AutoAcceptUntrustedCertificates)
+                    {
+                        DialogResult result = MessageBox.Show(
+                            e.Certificate.Subject,
+                            "Untrusted Certificate",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Warning);
+
+                        e.Accept = (result == DialogResult.Yes);
+                    }
                 }
             }
             catch (Exception exception)
