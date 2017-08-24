@@ -314,6 +314,8 @@ namespace Opc.Ua.Hsl
         #region 私有的方法
         private ApplicationConfiguration GetDefaultApplicationConfig()
         {
+
+
             ApplicationConfiguration config = new ApplicationConfiguration()
             {
                 ApplicationName = "OpcUaHslClient",
@@ -361,7 +363,20 @@ namespace Opc.Ua.Hsl
                 TraceMasks = 515,
             };
 
-            config.CertificateValidator = new CertificateValidator();
+
+
+            var certificateValidator = new CertificateValidator();
+            certificateValidator.CertificateValidation += (sender, eventArgs) =>
+            {
+                if (ServiceResult.IsGood(eventArgs.Error))
+                    eventArgs.Accept = true;
+                else if ((eventArgs.Error.StatusCode.Code == StatusCodes.BadCertificateUntrusted) && true)
+                    eventArgs.Accept = true;
+                else
+                    throw new Exception(string.Format("Failed to validate certificate with error code {0}: {1}", eventArgs.Error.Code, eventArgs.Error.AdditionalInfo));
+            };
+
+            config.CertificateValidator = certificateValidator;
             config.CertificateValidator.Update(config);
             return config;
         }
