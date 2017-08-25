@@ -454,6 +454,7 @@ namespace Opc.Ua.Hsl
                             block.CreateTag("TestValueInt", UnderlyingSystemDataType.Int32, UnderlyingSystemTagType.Analog, null, true);
                             block.CreateTag("TestValueFloat", UnderlyingSystemDataType.Float, UnderlyingSystemTagType.Normal, null, true);
                             block.CreateTag("AlarmTime", UnderlyingSystemDataType.DateTime, UnderlyingSystemTagType.Normal, null, true);
+                            //block.CreateTag("History",UnderlyingSystemDataType.Int32)
                             break;
                         }
                 }

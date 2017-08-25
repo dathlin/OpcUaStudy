@@ -36,6 +36,8 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.textBox3 = new System.Windows.Forms.TextBox();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox2
@@ -53,12 +55,12 @@
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(1001, 252);
+            this.textBox1.Size = new System.Drawing.Size(1001, 219);
             this.textBox1.TabIndex = 6;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(12, 329);
+            this.button2.Location = new System.Drawing.Point(12, 296);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(113, 23);
             this.button2.TabIndex = 5;
@@ -78,7 +80,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(131, 329);
+            this.button3.Location = new System.Drawing.Point(131, 296);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(113, 23);
             this.button3.TabIndex = 8;
@@ -88,7 +90,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(250, 329);
+            this.button4.Location = new System.Drawing.Point(250, 296);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(113, 23);
             this.button4.TabIndex = 9;
@@ -113,11 +115,33 @@
             this.textBox3.Size = new System.Drawing.Size(920, 21);
             this.textBox3.TabIndex = 11;
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(369, 296);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(113, 23);
+            this.button6.TabIndex = 12;
+            this.button6.Text = "批量读取";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(488, 296);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(113, 23);
+            this.button7.TabIndex = 13;
+            this.button7.Text = "历史数据读取";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // FormClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1031, 624);
+            this.Controls.Add(this.button7);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
@@ -146,6 +170,8 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button7;
     }
 }
 

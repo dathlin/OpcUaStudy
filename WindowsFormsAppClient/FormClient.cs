@@ -24,6 +24,8 @@ namespace WindowsFormsAppClient
             // use a default appConfig object
             // 使用了一个默认的配置对象
             client = new OpcUaClient(false);
+            client.OpcStatusChange += Client_OpcStatusChange;
+            client.SetLogOutPut();
         }
 
 
@@ -37,13 +39,19 @@ namespace WindowsFormsAppClient
         private void button1_Click(object sender, EventArgs e)
         {
             client.ServerUrl = textBox3.Text;
-            client.OpcStatusChange += Client_OpcStatusChange;
-            client.SetLogOutPut();
 
             // if server need a username and password
-            //client.UserIdentity = new UserIdentity("admin", "123456")
-;
-            client.Connect();
+            //client.UserIdentity = new UserIdentity("admin", "123456");
+
+            try
+            {
+                client.Connect();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("连接失败，原因：" + ex.Message);
+                return;
+            }
 
             button1.BackColor = Color.LimeGreen;
         }
@@ -109,6 +117,39 @@ namespace WindowsFormsAppClient
             {
                 textBox3.Text = url;
             }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            //批量读取数据测试
+            var reads = new string[]
+            {
+                "ns=2;s=1:Device B?Name",
+                "ns=2;s=1:Device B?IsFault",
+                "ns=2;s=1:Device B?TestValueInt",
+                "ns=2;s=1:Device B?TestValueFloat",
+                "ns=2;s=1:Device B?AlarmTime",
+            };
+            var values = client.ReadNodes(reads);
+
+            textBox2.Text = JArray.FromObject(values).ToString();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("[");
+
+            var list = client.ReadHistoryRawDataValues<int>("ns=2;s=1:Quickstarts.HistoricalAccessServer.Data.Dynamic.Int32.txt", 
+                new DateTime(2017,8,25), DateTime.MinValue,10);
+            foreach(int i in list)
+            {
+                stringBuilder.Append(i + ", ");
+            }
+            if (stringBuilder.Length > 2) stringBuilder.Remove(stringBuilder.Length - 2, 2);
+            stringBuilder.Append("]");
+
+            textBox2.AppendText(stringBuilder.ToString()+ Environment.NewLine);
         }
     }
 }

@@ -26216,6 +26216,7 @@ namespace Opc.Ua
     #if (!OPCUA_EXCLUDE_ReadRawModifiedDetails)
     /// <summary>
     /// A description for the ReadRawModifiedDetails DataType.
+    /// 读取历史数据时的细节参数
     /// </summary>
     /// <exclude />
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
@@ -26225,6 +26226,7 @@ namespace Opc.Ua
         #region Constructors
         /// <summary>
         /// The default constructor.
+        /// 默认的构造方法
         /// </summary>
         public ReadRawModifiedDetails()
         {
@@ -26242,6 +26244,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Sets private members to default values.
+        /// 设置私有字段的默认值
         /// </summary>
         private void Initialize()
         {
@@ -26256,6 +26259,7 @@ namespace Opc.Ua
         #region Public Properties
         /// <summary>
         /// A description for the IsReadModified field.
+        /// 是否读取修改的数据
         /// </summary>
         [DataMember(Name = "IsReadModified", IsRequired = false, Order = 1)]
         public bool IsReadModified
@@ -26266,6 +26270,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// A description for the StartTime field.
+        /// 数据的开始时间
         /// </summary>
         [DataMember(Name = "StartTime", IsRequired = false, Order = 2)]
         public DateTime StartTime
@@ -26276,6 +26281,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// A description for the EndTime field.
+        /// 数据的结束时间
         /// </summary>
         [DataMember(Name = "EndTime", IsRequired = false, Order = 3)]
         public DateTime EndTime
@@ -26286,6 +26292,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// A description for the NumValuesPerNode field.
+        /// 读取的数据的个数，先判定时间，再判定数据个数
         /// </summary>
         [DataMember(Name = "NumValuesPerNode", IsRequired = false, Order = 4)]
         public uint NumValuesPerNode
@@ -26296,6 +26303,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// A description for the ReturnBounds field.
+        /// 是否在返回的数据中包含边界
         /// </summary>
         [DataMember(Name = "ReturnBounds", IsRequired = false, Order = 5)]
         public bool ReturnBounds

@@ -307,7 +307,7 @@ namespace Opc.Ua.Hsl
             m_configuration.TraceConfiguration.DeleteOnLoad = true;
             m_configuration.TraceConfiguration.TraceMasks = 515;
         }
-        
+
 
         #endregion
 
@@ -853,6 +853,119 @@ namespace Opc.Ua.Hsl
 
 
         #endregion
+
+
+        #region 读取历史数据
+        /// <summary>
+        /// 读取一连串的历史数据
+        /// </summary>
+        /// <param name="url">节点的索引</param>
+        /// <param name="start">开始时间</param>
+        /// <param name="end">结束时间</param>
+        /// <param name="count">读取的个数</param>
+        /// <param name="containBound">是否包含边界</param>
+        /// <returns></returns>
+        public IEnumerable<DataValue> ReadHistoryRawDataValues(string url, DateTime start, DateTime end, uint count = 1, bool containBound = false)
+        {
+            HistoryReadValueId m_nodeToContinue = new HistoryReadValueId()
+            {
+                NodeId = new NodeId(url),
+            };
+
+            ReadRawModifiedDetails m_details = new ReadRawModifiedDetails
+            {
+                StartTime = start,
+                EndTime = end,
+                NumValuesPerNode = count,
+                IsReadModified = false,
+                ReturnBounds = containBound
+            };
+
+            HistoryReadValueIdCollection nodesToRead = new HistoryReadValueIdCollection();
+            nodesToRead.Add(m_nodeToContinue);
+
+
+            m_session.HistoryRead(
+                null,
+                new ExtensionObject(m_details),
+                TimestampsToReturn.Both,
+                false,
+                nodesToRead,
+                out HistoryReadResultCollection results,
+                out DiagnosticInfoCollection diagnosticInfos);
+
+            ClientBase.ValidateResponse(results, nodesToRead);
+            ClientBase.ValidateDiagnosticInfos(diagnosticInfos, nodesToRead);
+
+            if (StatusCode.IsBad(results[0].StatusCode))
+            {
+                throw new ServiceResultException(results[0].StatusCode);
+            }
+
+            HistoryData values = ExtensionObject.ToEncodeable(results[0].HistoryData) as HistoryData;
+            foreach(var value in values.DataValues)
+            {
+                yield return value;
+            }
+        }
+
+        /// <summary>
+        /// 读取一连串的历史数据，并将其转化成指定的类型
+        /// </summary>
+        /// <param name="url">节点的索引</param>
+        /// <param name="start">开始时间</param>
+        /// <param name="end">结束时间</param>
+        /// <param name="count">读取的个数</param>
+        /// <param name="containBound">是否包含边界</param>
+        /// <returns></returns>
+        public IEnumerable<T> ReadHistoryRawDataValues<T>(string url, DateTime start, DateTime end, uint count = 1, bool containBound = false)
+        {
+            HistoryReadValueId m_nodeToContinue = new HistoryReadValueId()
+            {
+                NodeId = new NodeId(url),
+            };
+
+            ReadRawModifiedDetails m_details = new ReadRawModifiedDetails
+            {
+                StartTime = start.ToUniversalTime(),
+                EndTime = end.ToUniversalTime(),
+                NumValuesPerNode = count,
+                IsReadModified = false,
+                ReturnBounds = containBound
+            };
+
+            HistoryReadValueIdCollection nodesToRead = new HistoryReadValueIdCollection();
+            nodesToRead.Add(m_nodeToContinue);
+
+
+            m_session.HistoryRead(
+                null,
+                new ExtensionObject(m_details),
+                TimestampsToReturn.Both,
+                false,
+                nodesToRead,
+                out HistoryReadResultCollection results,
+                out DiagnosticInfoCollection diagnosticInfos);
+
+            ClientBase.ValidateResponse(results, nodesToRead);
+            ClientBase.ValidateDiagnosticInfos(diagnosticInfos, nodesToRead);
+
+            if (StatusCode.IsBad(results[0].StatusCode))
+            {
+                throw new ServiceResultException(results[0].StatusCode);
+            }
+
+            HistoryData values = ExtensionObject.ToEncodeable(results[0].HistoryData) as HistoryData;
+            foreach (var value in values.DataValues)
+            {
+                yield return (T)value.Value;
+            }
+        }
+
+
+        #endregion
+
+
 
         #region 私有对象
 
