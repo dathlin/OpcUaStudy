@@ -28,6 +28,7 @@ namespace Opc.Ua
 {
     /// <summary> 
     /// The base class for all object nodes.
+    /// 所有对象节点的基类，继承自实例的节点
     /// </summary>
     public class BaseObjectState : BaseInstanceState
     {
@@ -101,6 +102,7 @@ namespace Opc.Ua
         #region Public Members
         /// <summary>
         /// The inverse name for the reference.
+        /// 引用的反名称
         /// </summary>
         public byte EventNotifier
         {
@@ -242,6 +244,7 @@ namespace Opc.Ua
         #region Read Support Functions
         /// <summary>
         /// Reads the value for any non-value attribute.
+        /// 读取任何非值属性的值，主要是用于读取节点的属性值
         /// </summary>
         protected override ServiceResult ReadNonValueAttribute(
             ISystemContext context,
@@ -277,6 +280,7 @@ namespace Opc.Ua
         #region Write Support Functions
         /// <summary>
         /// Write the value for any non-value attribute.
+        /// 写任何非值属性的值
         /// </summary>
         protected override ServiceResult WriteNonValueAttribute(
             ISystemContext context,
@@ -325,9 +329,10 @@ namespace Opc.Ua
         private byte m_eventNotifier;
         #endregion
     }
-    
+
     /// <summary> 
     /// The base class for all folder nodes.
+    /// 所有文件夹节点的基类，负责将基类<see cref="BaseObjectState"/>中的参数初始化成文件夹节点
     /// </summary>
     public class FolderState : BaseObjectState
     {

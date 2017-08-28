@@ -28,6 +28,7 @@ namespace Opc.Ua
 {
     /// <summary> 
     /// The base class for all variable nodes.
+    /// 所有变量节点的基类
     /// </summary>
     [DataContract(Namespace = Namespaces.OpcUaXsd)]
     public abstract class BaseVariableState : BaseInstanceState
@@ -451,6 +452,7 @@ namespace Opc.Ua
         #region Public Members
         /// <summary>
         /// The value of the variable.
+        /// 变量的值
         /// </summary>
         public object Value
         {
@@ -477,6 +479,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Whether the value can be set to null.
+        /// 是否为值类型，决定了该值是否可以设置为null
         /// </summary>
         public bool IsValueType
         {
@@ -486,6 +489,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The value of the variable as a Variant.
+        /// 变量的值作为变量
         /// </summary>
         /// <value>The wrapped value as a Variant.</value>
         [DataMember(Name = "Value", Order = 0, IsRequired = false, EmitDefaultValue = false)]
@@ -504,6 +508,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The timestamp associated with the variable value.
+        /// 与变量值相关联的时间戳
         /// </summary>
         /// <value>The timestamp.</value>
         public DateTime Timestamp
@@ -526,6 +531,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The status code associated with the variable value.
+        /// 与变量值相关联的状态代码
         /// </summary>
         /// <value>The status code.</value>
         public StatusCode StatusCode
@@ -548,6 +554,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The behavoir to use when reading or writing all or part of the object.
+        /// 读取或写入全部或部分对象时使用的行为
         /// </summary>
         /// <value>The copy policy that specifies the policies to use when handling reads and write to value.</value>
         /// <remarks>
@@ -561,6 +568,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The data type for the variable value.
+        /// 变量值的数据类型
         /// </summary>
         /// <value>The type of the data <see cref="NodeId"/>.</value>
         [DataMember(Name = "DataType", Order = 1, IsRequired = false, EmitDefaultValue = false)]
@@ -584,6 +592,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The number of array dimensions permitted for the variable value.
+        /// 变量值允许的数组维数，指示变量类型是否为数组，并别数组多大，不是数组则为-1
         /// </summary>
         /// <value>The value rank. </value>
         /// <remarks>Indicates whether the DataType is an array and how many dimensions the array has.</remarks>
@@ -608,6 +617,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The number of dimensions for an array values with one or more fixed dimensions.
+        /// 具有一个或多个固定维度的数组值的维数。
         /// </summary>
         /// <value>The array dimensions.</value>
         /// <remarks>
@@ -615,6 +625,10 @@ namespace Opc.Ua
         /// the Array Dimensions attribute can either be set to null or the attribute is missing. This behaviour is vendor-specific.
         /// If the Value Rank attribute specifies an array of a specific dimension (i.e. ValueRank &gt; 0) then the Array Dimensions
         /// attribute shall be specified in the table defining the Variable.
+        /// 
+        /// 如果“值等级”不标识特定维度的数组（即ValueRank &lt;= 0），则“数组维度”属性可以设置为null或缺少该属性。 
+        /// 此行为是供应商特定的。 如果Value Rank属性指定了一个特定维度的数组（即ValueRank＆gt; 0），
+        /// 那么Array Dimensions属性应在定义Variable的表中指定。
         /// </remarks>
         public ReadOnlyList<uint> ArrayDimensions
         {
@@ -636,6 +650,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The type of access available for the variable.
+        /// 访问等级
         /// </summary>
         /// <value>The access level.</value>
         [DataMember(Name = "AccessLevel", Order = 4, IsRequired = false, EmitDefaultValue = false)]
@@ -659,6 +674,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The type of access granted to the current user.
+        /// 授予当前用户的访问类型
         /// </summary>
         /// <value>The user access level.</value>
         [DataMember(Name = "UserAccessLevel", Order = 5, IsRequired = false, EmitDefaultValue = false)]
@@ -682,6 +698,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The minimum sampling interval supported by the variable.
+        /// 变量支持的最小采样间隔，一般都为 0
         /// </summary>
         /// <value>The minimum sampling interval.</value>
         [DataMember(Name = "MinimumSamplingInterval", Order = 6, IsRequired = false, EmitDefaultValue = false)]
@@ -705,6 +722,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Whether the server is archiving the value of the variable.
+        /// 服务器是否归档变量的值，指示数据是否是历史数据
         /// </summary>
         /// <value><c>true</c> if historizing; otherwise, <c>false</c>.</value>
         [DataMember(Name = "Historizing", Order = 7, IsRequired = false, EmitDefaultValue = false)]
@@ -1948,9 +1966,10 @@ namespace Opc.Ua
         private VariableCopyPolicy m_copyPolicy;
         #endregion
     }
-    
+
     /// <summary> 
     /// A typed base class for all data variable nodes.
+    /// 所有数据变量节点的类型基类
     /// </summary>
     [DataContract(Namespace = Namespaces.OpcUaXsd)]
     public class PropertyState : BaseVariableState
@@ -2012,6 +2031,7 @@ namespace Opc.Ua
 
     /// <summary> 
     /// A typed base class for all data variable nodes.
+    /// 所有数据变量节点的类型基类
     /// </summary>
     [DataContract(Namespace = Namespaces.OpcUaXsd)]
     public class PropertyState<T> : PropertyState

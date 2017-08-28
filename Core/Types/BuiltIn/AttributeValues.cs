@@ -111,6 +111,7 @@ namespace Opc.Ua
 
     /// <summary>
     /// Constants defined for the ValueRank attribute.
+    /// 为ValueRank属性定义的常量
     /// </summary>
     /// <remarks>
     /// Constants defined for the ValueRank attribute.
@@ -119,31 +120,37 @@ namespace Opc.Ua
     {
         /// <summary>
         /// The variable may be a scalar or a one dimensional array.
+        /// 变量可以是标量或一维数组
         /// </summary>
         public const int ScalarOrOneDimension = -3;
-        
+
         /// <summary>
         /// The variable may be a scalar or an array of any dimension.
+        /// 该变量可以是标量或任何维度的数组
         /// </summary>
         public const int Any = -2;
-        
+
         /// <summary>
         /// The variable is always a scalar.
+        /// 变量总是一个标量
         /// </summary>
         public const int Scalar = -1;
 
         /// <summary>
         /// The variable is always an array with one or more dimensions.
+        /// 该变量始终是具有一个或多个维度的数组
         /// </summary>
         public const int OneOrMoreDimensions = 0;
 
         /// <summary>
         /// The variable is always one dimensional array.
+        /// 该变量始终是一维数组
         /// </summary>
         public const int OneDimension = 1;
 
         /// <summary>
         /// The variable is always an array with two or more dimensions.
+        /// 该变量始终是具有两个或更多维度的数组
         /// </summary>
         public const int TwoDimensions = 2;
         

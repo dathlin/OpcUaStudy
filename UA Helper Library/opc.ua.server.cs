@@ -252,7 +252,7 @@ namespace Opc.Ua.Hsl
             List<INodeManager> nodeManagers = new List<INodeManager>();
 
             // create the custom node managers.
-            nodeManagers.Add(new DataAccessServerNodeManager(server, configuration));
+            nodeManagers.Add(new OpcNodeManager(server, configuration));//DataAccessServerNodeManager
 
             // create master node manager.
             return new MasterNodeManager(server, configuration, null, nodeManagers.ToArray());

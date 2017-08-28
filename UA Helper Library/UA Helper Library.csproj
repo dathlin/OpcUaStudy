@@ -69,7 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Hsl\OpcNodeManager.cs" />
-    <Compile Include="Hsl\OpcNodeTag.cs" />
     <Compile Include="quickStart\DataAccessServerConfiguration.cs" />
     <Compile Include="Model\BlockState.cs" />
     <Compile Include="Model\ModelUtils.cs" />

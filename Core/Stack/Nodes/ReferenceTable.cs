@@ -140,6 +140,7 @@ namespace Opc.Ua
 
     /// <summary>
     /// A table of references for a node.
+    /// 一个节点的关联表
     /// </summary>
     public class ReferenceCollection : IReferenceCollection, IFormattable
     {

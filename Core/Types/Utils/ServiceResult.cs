@@ -24,9 +24,10 @@ using System.Runtime.Serialization;
 using System.Globalization;
 
 namespace Opc.Ua
-{    
+{
     /// <summary>
     /// A class that combines the status code and diagnostic info structures.
+    /// 组合状态代码和诊断信息结构的类
     /// </summary>
     [DataContract(Namespace = Namespaces.OpcUaXsd)]
     public class ServiceResult
@@ -645,10 +646,11 @@ namespace Opc.Ua
 			get	{ return m_code;  }
             private set { m_code = value; }
 		}
-        
-		/// <summary>
-		/// The status code associated with the result.
-		/// </summary>
+
+        /// <summary>
+        /// The status code associated with the result.
+        /// 与结果相关联的状态码
+        /// </summary>
         [DataMember(Order = 1)]
 		public StatusCode StatusCode
 		{
@@ -656,9 +658,10 @@ namespace Opc.Ua
             private set { m_code = value.Code; }
 		}
 
-		/// <summary>
-		/// The namespace that qualifies symbolic identifier.
-		/// </summary>
+        /// <summary>
+        /// The namespace that qualifies symbolic identifier.
+        /// 符号符号标识符的命名空间
+        /// </summary>
         [DataMember(Order = 2)]
 		public string NamespaceUri
 		{
@@ -666,9 +669,10 @@ namespace Opc.Ua
             private set { m_namespaceUri = value; }
 		}
 
-		/// <summary>
-		/// The qualified name of the symbolic identifier associated with the status code.
-		/// </summary>	
+        /// <summary>
+        /// The qualified name of the symbolic identifier associated with the status code.
+        /// 与状态代码相关联的符号标识符的限定名称
+        /// </summary>	
         [DataMember(Order = 3)]
 		public string SymbolicId
 		{
@@ -676,9 +680,10 @@ namespace Opc.Ua
             private set { m_symbolicId = value; }
 		}
 
-		/// <summary>
-		/// The localized description for the status code.
-		/// </summary>
+        /// <summary>
+        /// The localized description for the status code.
+        /// 状态代码的本地化描述
+        /// </summary>
         [DataMember(Order = 4)]
 		public LocalizedText LocalizedText
 		{

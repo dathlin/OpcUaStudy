@@ -3131,6 +3131,7 @@ namespace Opc.Ua
         #region Read Support Functions
         /// <summary>
         /// Reads the values for a set of attributes.
+        /// 读取一组属性的值
         /// </summary>
         /// <param name="context">The context for the current operation.</param>
         /// <param name="attributeIds">The attributes to read.</param>
@@ -3264,6 +3265,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Reads the value for any non-value attribute.
+        /// 读取任何非值属性的值
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="attributeId">The attribute idetifier <see cref="Attributes"/>.</param>
@@ -3406,6 +3408,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// When overridden in a derived class, iReads the value for the value attribute.
+        /// 在派生类中重写时，iReads为value属性的值
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="indexRange">The index range.</param>
@@ -3432,6 +3435,7 @@ namespace Opc.Ua
         #region Write Support Functions
         /// <summary>
         /// Writes the specified attribute value.
+        /// 写入指定的属性值
         /// </summary>
         /// <param name="context">The context for the current operation.</param>
         /// <param name="attributeId">The attribute id.</param>
@@ -3504,6 +3508,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Write the value for any non-value attribute.
+        /// 写任何非值属性的值
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="attributeId">The attribute id.</param>
@@ -3722,6 +3727,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Write the value for the value attribute.
+        /// 写入value属性的值
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="indexRange">The index range.</param>
@@ -4430,6 +4436,7 @@ namespace Opc.Ua
 
     /// <summary>
     /// Indicates what has changed in a node.
+    /// 指示节点中发生了什么变化，例如子节点增减，关联增减
     /// </summary>
     public enum NodeStateChangeMasks
     {

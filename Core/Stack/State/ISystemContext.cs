@@ -22,6 +22,7 @@ namespace Opc.Ua
 {
     /// <summary>
     /// An interface to an object that describes how access the system containing the data. 
+    /// 描述如何访问包含数据的系统的对象的接口
     /// </summary>
     public interface ISystemContext
     {

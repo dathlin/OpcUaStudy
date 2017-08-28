@@ -18,16 +18,19 @@ using System;
 using System.Collections.Generic;
 
 namespace Opc.Ua
-{    
+{
     #region Node Class
     /// <summary>
     /// A node in the server address space.
+    /// 服务器地址空间中的节点
     /// </summary>
     public partial class Node : IFormattable, ILocalNode
     {
         #region Constructors
+
         /// <summary>
         /// Creates a node from a reference desciption.
+        /// 从参考描述创建一个节点
         /// </summary>
         /// <param name="reference">The reference.</param>
         public Node(ReferenceDescription reference)
@@ -39,9 +42,10 @@ namespace Opc.Ua
             m_browseName  = reference.BrowseName;
             m_displayName = reference.DisplayName;
         }
-        
+
         /// <summary>
         /// Creates a node from another node (copies attributes - not references).
+        /// 从另一个节点创建一个节点（复制属性 - 不是引用）
         /// </summary>
         /// <param name="source">The source.</param>
         public Node(ILocalNode source)
@@ -50,18 +54,19 @@ namespace Opc.Ua
 
             if (source != null)
             {
-                this.NodeId        = source.NodeId;
-                this.NodeClass     = source.NodeClass;
-                this.BrowseName    = source.BrowseName;
-                this.DisplayName   = source.DisplayName;
-                this.Description   = source.Description;
-                this.WriteMask     = (uint)source.WriteMask;
-                this.UserWriteMask = (uint)source.UserWriteMask;
+                this.NodeId        = source.NodeId;// 节点ID
+                this.NodeClass     = source.NodeClass;// 节点类
+                this.BrowseName    = source.BrowseName;// 节点浏览名称
+                this.DisplayName   = source.DisplayName;// 节点显示名称
+                this.Description   = source.Description;// 节点描述
+                this.WriteMask     = (uint)source.WriteMask;// 节点写入的掩码
+                this.UserWriteMask = (uint)source.UserWriteMask;// 节点用户写入掩码
             }
         }
 
         /// <summary>
         /// Returns a copy of the node
+        /// 复制一个节点的数据
         /// </summary>
         /// <param name="source">The source.</param>
         /// <returns>A copy of the source node</returns>
@@ -100,6 +105,7 @@ namespace Opc.Ua
         #region Public Properties
         /// <summary>
         /// An opaque handle that can be assoociated with the node.
+        /// 可以与节点相关联的不透明句柄
         /// </summary>
         /// <value>The handle.</value>
         public object Handle
@@ -112,6 +118,7 @@ namespace Opc.Ua
         #region IFormattable Members
         /// <summary>
         /// Returns the string representation of the object.
+        /// 返回对象的字符串表示形式
         /// </summary>
         /// <param name="format">The format.</param>
         /// <param name="provider">The provider.</param>
@@ -135,9 +142,10 @@ namespace Opc.Ua
         
             throw new FormatException(Utils.Format("Invalid format string: '{0}'.", format));
         }
-        
+
         /// <summary>
         /// Returns the string representation of the object.
+        /// 返回对象的字符串表示形式
         /// </summary>
         /// <returns>
         /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
@@ -151,6 +159,7 @@ namespace Opc.Ua
         #region INode Methods
         /// <summary>
         /// The node identifier.
+        /// 节点的标识
         /// </summary>
         /// <value>The node identifier.</value>
         ExpandedNodeId Opc.Ua.INode.NodeId
@@ -160,6 +169,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The identifier for the TypeDefinition node.
+        /// TypeDefinition节点的标识符
         /// </summary>
         /// <value>The type definition identifier.</value>
         public ExpandedNodeId TypeDefinitionId

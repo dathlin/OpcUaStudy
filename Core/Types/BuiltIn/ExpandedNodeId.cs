@@ -22,9 +22,10 @@ using System.Runtime.Serialization;
 using System.Globalization;
 
 namespace Opc.Ua
-{    
+{
     /// <summary>
     /// Extends a node id by adding a complete namespace URI.
+    /// 通过添加完整的命名空间URI来扩展节点ID
     /// </summary>
     /// <remarks>
     /// Extends a node id by adding a complete namespace URI.

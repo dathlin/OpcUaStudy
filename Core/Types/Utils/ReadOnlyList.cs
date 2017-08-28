@@ -23,6 +23,7 @@ namespace Opc.Ua
 {
     /// <summary>
     /// A template list class that can be used to expose members of immutable classes.
+    /// 可用于暴露不可变类成员的模板列表类
     /// </summary>
     public class ReadOnlyList<T> : IList<T>, IList
     {

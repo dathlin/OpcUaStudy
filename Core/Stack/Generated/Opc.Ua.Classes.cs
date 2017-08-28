@@ -3412,13 +3412,14 @@ namespace Opc.Ua
         private PropertyState<NetworkGroupDataType[]> m_serverNetworkGroups;
         #endregion
     }
-    #endif
+#endif
     #endregion
 
     #region OperationLimitsState Class
-    #if (!OPCUA_EXCLUDE_OperationLimitsState)
+#if (!OPCUA_EXCLUDE_OperationLimitsState)
     /// <summary>
     /// Stores an instance of the OperationLimitsType ObjectType.
+    /// 存储操作限制类型 ObjectType的实例。
     /// </summary>
     /// <exclude />
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
@@ -3614,12 +3615,13 @@ namespace Opc.Ua
            "bnVtYmVyIG9mIG9wZXJhdGlvbnMgaW4gYSBzaW5nbGUgTW9uaXRvcmVkSXRlbSByZWxhdGVkIHJlcXVl" +
            "c3QuAC4ARDYtAAAAB/////8BAf////8AAAAA";
         #endregion
-        #endif
+#endif
         #endregion
 
         #region Public Properties
         /// <summary>
         /// The maximum number of operations in a single Read request.
+        /// 单次读取请求中的最大操作数
         /// </summary>
         public PropertyState<uint> MaxNodesPerRead
         {
@@ -3641,6 +3643,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of operations in a single data HistoryRead request.
+        /// 单个历史数据读取请求中的最大操作数
         /// </summary>
         public PropertyState<uint> MaxNodesPerHistoryReadData
         {
@@ -3662,6 +3665,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of operations in a single event HistoryRead request.
+        /// 单个历史事件读取请求中的最大操作数
         /// </summary>
         public PropertyState<uint> MaxNodesPerHistoryReadEvents
         {
@@ -3683,6 +3687,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of operations in a single Write request.
+        /// 单次写入请求中的最大操作数
         /// </summary>
         public PropertyState<uint> MaxNodesPerWrite
         {
@@ -3704,6 +3709,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of operations in a single data HistoryUpdate request.
+        /// 单个历史数据更新请求中的最大操作数
         /// </summary>
         public PropertyState<uint> MaxNodesPerHistoryUpdateData
         {
@@ -3725,6 +3731,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of operations in a single event HistoryUpdate request.
+        /// 单个历史事件更新请求中的最大操作数
         /// </summary>
         public PropertyState<uint> MaxNodesPerHistoryUpdateEvents
         {
@@ -3746,6 +3753,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of operations in a single Call request.
+        /// 单个方法调用请求中的最大操作数。
         /// </summary>
         public PropertyState<uint> MaxNodesPerMethodCall
         {
@@ -3767,6 +3775,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of operations in a single Browse request.
+        /// 单个浏览请求中的最大操作数
         /// </summary>
         public PropertyState<uint> MaxNodesPerBrowse
         {
@@ -3788,6 +3797,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of operations in a single RegisterNodes request.
+        /// 单个注册节点请求中的最大操作数。
         /// </summary>
         public PropertyState<uint> MaxNodesPerRegisterNodes
         {
@@ -3809,6 +3819,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of operations in a single TranslateBrowsePathsToNodeIds request.
+        /// 单个节点浏览翻译成节点ID请求中的最大操作数。
         /// </summary>
         public PropertyState<uint> MaxNodesPerTranslateBrowsePathsToNodeIds
         {
@@ -3830,6 +3841,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of operations in a single AddNodes, AddReferences, DeleteNodes or DeleteReferences request.
+        /// 单个AddNodes，AddReferences，DeleteNodes或DeleteReferences请求中的最大操作数。
         /// </summary>
         public PropertyState<uint> MaxNodesPerNodeManagement
         {
@@ -3851,6 +3863,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of operations in a single MonitoredItem related request.
+        /// 单个MonitoredItem相关请求中的最大操作数
         /// </summary>
         public PropertyState<uint> MaxMonitoredItemsPerCall
         {
@@ -4239,13 +4252,14 @@ namespace Opc.Ua
         private PropertyState<uint> m_maxMonitoredItemsPerCall;
         #endregion
     }
-    #endif
+#endif
     #endregion
 
     #region FileState Class
-    #if (!OPCUA_EXCLUDE_FileState)
+#if (!OPCUA_EXCLUDE_FileState)
     /// <summary>
     /// Stores an instance of the FileType ObjectType.
+    /// 存储文件类型 ObjectType的实例。
     /// </summary>
     /// <exclude />
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
@@ -4327,12 +4341,13 @@ namespace Opc.Ua
            "ZQAH/////wAAAAAAAQAqAQEXAAAACAAAAFBvc2l0aW9uAAn/////AAAAAAABACgBAQAAAAEB/////wAA" +
            "AAA=";
         #endregion
-        #endif
+#endif
         #endregion
 
         #region Public Properties
         /// <summary>
         /// The size of the file in bytes.
+        /// 文件的大小（以字节为单位）
         /// </summary>
         public PropertyState<ulong> Size
         {
@@ -4354,6 +4369,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Whether the file is writable.
+        /// 文件是否可写
         /// </summary>
         public PropertyState<bool> Writable
         {
@@ -4375,6 +4391,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Whether the file is writable by the current user.
+        /// 指示当前用户对文件是否可写
         /// </summary>
         public PropertyState<bool> UserWritable
         {
@@ -4396,6 +4413,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The current number of open file handles.
+        /// 当前打开的文件句柄数
         /// </summary>
         public PropertyState<ushort> OpenCount
         {
@@ -4417,6 +4435,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The content of the file.
+        /// 文件的内容
         /// </summary>
         public PropertyState<string> MimeType
         {
@@ -4438,6 +4457,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// A description for the OpenMethodType Method.
+        /// 打开方法类型的方法描述
         /// </summary>
         public OpenMethodState Open
         {
@@ -4459,6 +4479,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// A description for the CloseMethodType Method.
+        /// 什么鬼，都不知道怎么翻译
         /// </summary>
         public CloseMethodState Close
         {

@@ -25,9 +25,10 @@ using System.Reflection;
 using System.Threading;
 
 namespace Opc.Ua
-{       
+{
     /// <summary> 
     /// The base class for all instance nodes.
+    /// 所有实例节点的基类，继承自自定义节点的基类
     /// </summary>
     public abstract class BaseInstanceState : NodeState, IFilterTarget
     {
@@ -74,6 +75,7 @@ namespace Opc.Ua
         #region Public Members
         /// <summary>
         /// The parent node.
+        /// 父节点
         /// </summary>
         public NodeState Parent
         {
@@ -83,6 +85,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Returns the id of the default type definition node for the instance.
+        /// 返回实例的默认类型定义节点的ID
         /// </summary>
         /// <returns>The type definition id.</returns>
         public virtual NodeId GetDefaultTypeDefinitionId(ISystemContext context)
@@ -100,6 +103,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Gets a display text for the node.
+        /// 获取节点的显示路径
         /// </summary>
         public string GetDisplayText()
         {
@@ -161,6 +165,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Returns non-null text for the node.
+        /// 返回节点的非空文本，即时对象为空，仍然可以有null文本返回
         /// </summary>
         private string GetNonNullText(NodeState node)
         {

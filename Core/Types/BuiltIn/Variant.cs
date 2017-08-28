@@ -23,9 +23,10 @@ using System.Text;
 using System.Xml;
 
 namespace Opc.Ua
-{   
+{
     /// <summary>
     /// A structure that could contain value with any of the UA built-in data types.
+    /// 可以包含任何UA内置数据类型的值的结构
     /// </summary>
     /// <remarks>
     /// <para>
