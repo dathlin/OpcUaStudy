@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.8
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsAppClient", "WindowsFormsAppClient\WindowsFormsAppClient.csproj", "{6D3E5E5A-B856-48ED-832E-6407EF5640FE}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UA Helper Library", "UA Helper Library\UA Helper Library.csproj", "{04BF3274-2158-48C7-963D-1EA22109E6FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsAppServer", "WindowsFormsAppServer\WindowsFormsAppServer.csproj", "{2D5004EC-30B5-4A93-86F1-6B3BE38C9281}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpcUa Server", "HslServer\OpcUa Server.csproj", "{42EF4F25-29BF-4AB7-B403-8523694A3B36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{2D5004EC-30B5-4A93-86F1-6B3BE38C9281}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D5004EC-30B5-4A93-86F1-6B3BE38C9281}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D5004EC-30B5-4A93-86F1-6B3BE38C9281}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42EF4F25-29BF-4AB7-B403-8523694A3B36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42EF4F25-29BF-4AB7-B403-8523694A3B36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42EF4F25-29BF-4AB7-B403-8523694A3B36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42EF4F25-29BF-4AB7-B403-8523694A3B36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

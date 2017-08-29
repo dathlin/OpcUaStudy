@@ -58,6 +58,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -75,6 +77,23 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Hsl\OpcNodeManager.cs" />
+    <Compile Include="OpcFoundationDA\DAServer.cs" />
+    <Compile Include="OpcFoundationDA\Model\BlockState.cs" />
+    <Compile Include="OpcFoundationDA\Model\ModelUtils.cs" />
+    <Compile Include="Share\Namespaces.cs" />
+    <Compile Include="OpcFoundationDA\Model\SegmentBrowser.cs" />
+    <Compile Include="OpcFoundationDA\Model\SegmentState.cs" />
+    <Compile Include="OpcFoundationDA\quickStart\DataAccessServerConfiguration.cs" />
+    <Compile Include="OpcFoundationDA\quickStart\MonitoredNode.cs" />
+    <Compile Include="OpcFoundationDA\quickStart\NodeHandle.cs" />
+    <Compile Include="OpcFoundationDA\quickStart\QuickstartNodeManager.cs" />
+    <Compile Include="OpcFoundationDA\UnderlyingSystem\UnderlyingSystem.cs" />
+    <Compile Include="OpcFoundationDA\UnderlyingSystem\UnderlyingSystemBlock.cs" />
+    <Compile Include="OpcFoundationDA\UnderlyingSystem\UnderlyingSystemDataType.cs" />
+    <Compile Include="OpcFoundationDA\UnderlyingSystem\UnderlyingSystemSegment.cs" />
+    <Compile Include="OpcFoundationDA\UnderlyingSystem\UnderlyingSystemTag.cs" />
+    <Compile Include="OpcFoundationDA\UnderlyingSystem\UnderlyingSystemTagType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -108,5 +127,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

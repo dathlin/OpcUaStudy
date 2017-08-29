@@ -49,6 +49,7 @@ namespace Opc.Ua.Server
 {
     /// <summary>
     /// The standard implementation of a UA server.
+    /// 一个标准的UA服务器实现
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public partial class StandardServer : SessionServerBase
