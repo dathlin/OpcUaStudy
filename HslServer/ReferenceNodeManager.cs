@@ -145,6 +145,23 @@ namespace OpcUaServer
                     externalReferences[ObjectIds.ObjectsFolder] = references = new List<IReference>();
                 }
 
+                FolderState rootMy = CreateFolder(null, "Machines", "Machines");
+                rootMy.AddReference(ReferenceTypes.Organizes, true, ObjectIds.ObjectsFolder);
+                references.Add(new NodeStateReference(ReferenceTypes.Organizes, false, rootMy.NodeId));
+                rootMy.EventNotifier = EventNotifiers.SubscribeToEvents;
+                AddRootNotifier(rootMy);
+
+                string[] machines = new string[] { "Machine A", "Machine B", "Machine C" };
+                foreach (var m in machines)
+                {
+                    FolderState myFolder = CreateFolder(rootMy, "Machines" + "/" + m, m);
+
+                    CreateVariable(myFolder, "Machines" + "/" + m + "/" + "Name", "Name", DataTypeIds.String, ValueRanks.Scalar).Value = "测试数据";
+                    CreateVariable(myFolder, "Machines" + "/" + m + "/" + "IsFault", "IsFault", DataTypeIds.Boolean, ValueRanks.Scalar).Value = true;
+                }
+
+
+
                 FolderState root = CreateFolder(null, "CTT", "CTT");
                 root.AddReference(ReferenceTypes.Organizes, true, ObjectIds.ObjectsFolder);
                 references.Add(new NodeStateReference(ReferenceTypes.Organizes, false, root.NodeId));
@@ -1206,6 +1223,7 @@ namespace OpcUaServer
                 }
 
                 AddPredefinedNode(SystemContext, root);
+                AddPredefinedNode(SystemContext, rootMy);
                 m_simulationTimer = new Timer(DoSimulation, null, 1000, 1000);
             }
         }
@@ -1265,6 +1283,16 @@ namespace OpcUaServer
             folder.ReferenceTypeId = ReferenceTypes.Organizes;
             folder.TypeDefinitionId = ObjectTypeIds.FolderType;
             folder.NodeId = new NodeId(path, NamespaceIndex);
+
+
+            if (times >= 0)
+            {
+                string temp = parent?.NodeId.ToString();
+                System.Windows.Forms.MessageBox.Show("值：" + temp + Environment.NewLine + "先：" + folder.NodeId.ToString());
+                times++;
+            }
+
+
             folder.BrowseName = new QualifiedName(path, NamespaceIndex);
             folder.DisplayName = new LocalizedText("en", name);
             folder.WriteMask = AttributeWriteMask.None;
@@ -1814,6 +1842,8 @@ namespace OpcUaServer
             return CreateVariable(parent, path, name, (uint)dataType, valueRank);
         }
 
+        private int times = 0;
+
         /// <summary>
         /// Creates a new variable.
         /// </summary>
@@ -1825,6 +1855,15 @@ namespace OpcUaServer
             variable.ReferenceTypeId = ReferenceTypes.Organizes;
             variable.TypeDefinitionId = VariableTypeIds.BaseDataVariableType;
             variable.NodeId = new NodeId(path, NamespaceIndex);
+
+            if (times == 0)
+            {
+                string temp = parent?.NodeId.ToString();
+                System.Windows.Forms.MessageBox.Show("值：" + temp + Environment.NewLine + "先：" + variable.NodeId.ToString());
+                times++;
+            }
+
+
             variable.BrowseName = new QualifiedName(path, NamespaceIndex);
             variable.DisplayName = new LocalizedText("en", name);
             variable.WriteMask = AttributeWriteMask.DisplayName | AttributeWriteMask.Description;
@@ -1845,6 +1884,7 @@ namespace OpcUaServer
 
             return variable;
         }
+        
 
         private BaseDataVariableState[] CreateVariables(NodeState parent, string path, string name, BuiltInType dataType, int valueRank, UInt16 numVariables)
         {

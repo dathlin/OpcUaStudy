@@ -4442,16 +4442,19 @@ namespace Opc.Ua
     {
         /// <summary>
         /// None has changed
+        /// 没有发生什么改变
         /// </summary>
         None = 0x00,
 
         /// <summary>
         /// One or more children have been added, removed or replaced.
+        /// 一个或更多的子节点被添加，移除或是替换
         /// </summary>
         Children = 0x01,
 
         /// <summary>
         /// One or more references have been added or removed.
+        /// 一个或更多的
         /// </summary>
         References = 0x02,
 

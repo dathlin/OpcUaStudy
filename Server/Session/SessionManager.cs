@@ -710,6 +710,7 @@ namespace Opc.Ua.Server
 
     /// <summary>
     /// Allows application components to receive notifications when changes to sessions occur.
+    /// 允许应用程序组件在发生更改会话时接收通知
     /// </summary>
     /// <remarks>
     /// Sinks that receive these events must not block the thread.
@@ -718,26 +719,31 @@ namespace Opc.Ua.Server
     {
         /// <summary>
         /// Raised after a new session is created.
+        /// 在一个新的会话创建的时候触发
         /// </summary>
         event SessionEventHandler SessionCreated;
 
         /// <summary>
         /// Raised whenever a session is activated and the user identity or preferred locales changed.
+        /// 每当激活会话并且用户身份或首选区域设置更改时触发
         /// </summary>
         event SessionEventHandler SessionActivated;
 
         /// <summary>
         /// Raised before a session is closed.
+        /// 再一个会话关闭的时候触发
         /// </summary>
         event SessionEventHandler SessionClosing;
 
         /// <summary>
         /// Raised before the user identity for a session is changed.
+        /// 在会话的用户身份更改之前触发。
         /// </summary>
         event ImpersonateEventHandler ImpersonateUser;
 
         /// <summary>
         /// Returns all of the sessions known to the session manager.
+        /// 返回会话管理器已知的所有会话
         /// </summary>
         /// <returns>A list of the sessions.</returns>
         IList<Session> GetSessions();

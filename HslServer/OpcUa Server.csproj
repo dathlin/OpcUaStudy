@@ -95,6 +95,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormHuiBoServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHuiBoServer.Designer.cs">
+      <DependentUpon>FormHuiBoServer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\Quickstarts.Reference.Classes.cs" />
     <Compile Include="Model\Quickstarts.Reference.Constants.cs" />
     <Compile Include="Model\Quickstarts.Reference.DataTypes.cs" />
@@ -116,6 +122,9 @@
     </Content>
     <Content Include="Readme.htm" />
     <Content Include="Resources\OPCFoundation.jpg" />
+    <EmbeddedResource Include="FormHuiBoServer.resx">
+      <DependentUpon>FormHuiBoServer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MonitoredItemEventLogDlg.resx">
       <DependentUpon>MonitoredItemEventLogDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
