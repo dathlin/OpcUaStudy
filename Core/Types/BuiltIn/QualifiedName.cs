@@ -23,9 +23,10 @@ using System.Globalization;
 
 namespace Opc.Ua
 {
-	  /// <summary>
-	  /// A name qualified with a namespace.
-	  /// </summary>
+    /// <summary>
+    /// A name qualified with a namespace.
+    /// 具有命名空间的名称
+    /// </summary>
     /// <remarks>
     /// <para>
     /// The QualifiedName is defined in <b>Part 3 - Address Space Model, Section 7.3</b>, titled 

@@ -816,7 +816,7 @@ namespace Opc.Ua
     #if (!OPCUA_EXCLUDE_NodeClass)
     /// <summary>
     /// A mask specifying the class of the node.
-    /// 指定节点类的掩码
+    /// 一个可以指定节点类型的掩码，例如，指定为值，方法，视图等等
     /// </summary>
     /// <exclude />
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
@@ -825,7 +825,7 @@ namespace Opc.Ua
     {
         /// <summary>
         /// No classes are selected.
-        /// 没有选择任何类
+        /// 没有指定任何类型
         /// </summary>
         [EnumMember(Value = "Unspecified_0")]
         Unspecified = 0,
@@ -6050,13 +6050,14 @@ namespace Opc.Ua
         private ServerOnNetworkCollection m_servers;
         #endregion
     }
-    #endif
+#endif
     #endregion
 
     #region MessageSecurityMode Enumeration
-    #if (!OPCUA_EXCLUDE_MessageSecurityMode)
+#if (!OPCUA_EXCLUDE_MessageSecurityMode)
     /// <summary>
     /// The type of security to use on a message.
+    /// 消息中使用的安全类型
     /// </summary>
     /// <exclude />
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
@@ -6065,6 +6066,7 @@ namespace Opc.Ua
     {
         /// <summary>
         /// An invalid mode.
+        /// 无效模式
         /// </summary>
         [EnumMember(Value = "Invalid_0")]
         Invalid = 0,
@@ -6094,6 +6096,7 @@ namespace Opc.Ua
     #if (!OPCUA_EXCLUDE_UserTokenType)
     /// <summary>
     /// The possible user token types.
+    /// 可能的用户令牌类型，例如匿名用户还是账户密码类型的
     /// </summary>
     /// <exclude />
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
@@ -6102,35 +6105,40 @@ namespace Opc.Ua
     {
         /// <summary>
         /// An anonymous user.
+        /// 一个匿名用户
         /// </summary>
         [EnumMember(Value = "Anonymous_0")]
         Anonymous = 0,
 
         /// <summary>
         /// A user identified by a user name and password.
+        /// 一个使用用户名和密码登录的用户
         /// </summary>
         [EnumMember(Value = "UserName_1")]
         UserName = 1,
 
         /// <summary>
         /// A user identified by an X509 certificate.
+        /// 一个使用证书的用户
         /// </summary>
         [EnumMember(Value = "Certificate_2")]
         Certificate = 2,
 
         /// <summary>
         /// A user identified by WS-Security XML token.
+        /// 一个使用WS-Security XML令牌的用户，什么鬼
         /// </summary>
         [EnumMember(Value = "IssuedToken_3")]
         IssuedToken = 3,
     }
-    #endif
+#endif
     #endregion
 
     #region UserTokenPolicy Class
-    #if (!OPCUA_EXCLUDE_UserTokenPolicy)
+#if (!OPCUA_EXCLUDE_UserTokenPolicy)
     /// <summary>
     /// Describes a user token that can be used with a server.
+    /// 描述用于服务器使用的用户令牌。
     /// </summary>
     /// <exclude />
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
@@ -6171,6 +6179,7 @@ namespace Opc.Ua
         #region Public Properties
         /// <summary>
         /// A identifier for the policy assigned by the server.
+        /// 服务器分配的策略的标识符
         /// </summary>
         [DataMember(Name = "PolicyId", IsRequired = false, Order = 1)]
         public string PolicyId
@@ -6181,6 +6190,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The type of user token.
+        /// 用户令牌的类型
         /// </summary>
         [DataMember(Name = "TokenType", IsRequired = false, Order = 2)]
         public UserTokenType TokenType
@@ -6191,6 +6201,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The type of issued token.
+        /// 发行令牌的类型
         /// </summary>
         [DataMember(Name = "IssuedTokenType", IsRequired = false, Order = 3)]
         public string IssuedTokenType
@@ -6201,6 +6212,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The endpoint or any other information need to contruct an issued token URL.
+        /// 端点或任何其他信息需要构造发出的令牌URL
         /// </summary>
         [DataMember(Name = "IssuerEndpointUrl", IsRequired = false, Order = 4)]
         public string IssuerEndpointUrl
@@ -6211,6 +6223,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The security policy to use when encrypting or signing the user token.
+        /// 加密或签名用户令牌时使用的安全策略
         /// </summary>
         [DataMember(Name = "SecurityPolicyUri", IsRequired = false, Order = 5)]
         public string SecurityPolicyUri

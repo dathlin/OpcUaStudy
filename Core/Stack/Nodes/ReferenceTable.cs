@@ -19,20 +19,23 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace Opc.Ua
-{          
+{
     /// <summary>
     /// A reference to a node.
+    /// 一个对节点引用的接口
     /// </summary>
     public interface IReference
     {
         /// <summary>
         /// The type of reference.
+        /// 引用的类型标识
         /// </summary>
         /// <value>The reference type identifier.</value>
         NodeId ReferenceTypeId { get; }
 
         /// <summary>
         /// True if the reference is an inverse reference.
+        /// 是否为反向引用
         /// </summary>
         /// <value>
         /// 	<c>true</c> if this instance is inverse; otherwise, <c>false</c>.
@@ -41,6 +44,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The identifier for the target node.
+        /// 目标节点的标识，这是一个扩展的节点类型
         /// </summary>
         /// <value>The target identifier.</value>
         ExpandedNodeId TargetId { get; }
@@ -48,6 +52,7 @@ namespace Opc.Ua
     
     /// <summary>
     /// A reference to a node.
+    /// 一个节点的引用
     /// </summary>
     public interface IReferenceCollection : ICollection<IReference>, IEnumerable<IReference>
     {

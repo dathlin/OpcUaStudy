@@ -244,7 +244,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// A symbolic name for the node that is not expected to be globally unique.
-        /// 不希望是全局唯一的节点的符号名称
+        /// 不一定是全局唯一的节点的符号名称
         /// </summary>
         /// <value>The name of the symbolic.</value>
         /// <remarks>
@@ -291,6 +291,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The browse name of the node.
+        /// 节点的浏览名称
         /// </summary>
         /// <value>The name qualified with a namespace.</value>
         public QualifiedName BrowseName
@@ -313,6 +314,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The display name for the node.
+        /// 节点的显示名称
         /// </summary>
         /// <value>Human readable qualified with a locale.</value>
         public LocalizedText DisplayName
@@ -335,6 +337,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The localized description for the node.
+        /// 节点的本地化描述文本
         /// </summary>
         /// <value>Human readable qualified with a locale.</value>
         public LocalizedText Description
@@ -357,6 +360,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Specifies which attributes are writeable.
+        /// 指定哪些属性是可写的
         /// </summary>
         /// <value>A description for the AttributeWriteMask of the node fields.</value>
         public AttributeWriteMask WriteMask
@@ -379,6 +383,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Specifies which attributes are writeable for the current user.
+        /// 指定哪些属性对于当前用户可写入
         /// </summary>
         /// <value>A description for the AttributeWriteMask of the node fields.</value>
         public AttributeWriteMask UserWriteMask
@@ -2466,17 +2471,9 @@ namespace Opc.Ua
 
             if (m_changeMasks != NodeStateChangeMasks.None)
             {
-                var onStateChanged = OnStateChanged;
-                if (onStateChanged != null)
-                {
-                    onStateChanged(context, this, m_changeMasks);
-                }
+                OnStateChanged?.Invoke(context, this, m_changeMasks);
 
-                var stateChanged = StateChanged;
-                if (stateChanged != null)
-                {
-                    stateChanged(context, this, m_changeMasks);
-                }
+                StateChanged?.Invoke(context, this, m_changeMasks);
 
                 m_changeMasks = NodeStateChangeMasks.None;
             }
@@ -4399,16 +4396,19 @@ namespace Opc.Ua
         {
             /// <summary>
             /// The node state.
+            /// 自定义节点基类
             /// </summary>
             public NodeState Node;
 
             /// <summary>
             /// The reference type id.
+            /// 引用的类型ID
             /// </summary>
             public NodeId ReferenceTypeId;
 
             /// <summary>
             /// Whether the reference direction is inverse.
+            /// 是否为反向引用
             /// </summary>
             public bool IsInverse;
         }

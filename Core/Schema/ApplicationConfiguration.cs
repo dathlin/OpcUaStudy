@@ -887,6 +887,7 @@ namespace Opc.Ua
     #region SamplingRateGroup Class
     /// <summary>
     /// A class that defines a group of sampling rates supported by the server.
+    /// 定义服务器支持的一组采样率的类
     /// </summary>
     [DataContract(Namespace = Namespaces.OpcUaConfig)]
     public class SamplingRateGroup
@@ -1111,6 +1112,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The security policies supported by the server.
+        /// 服务器支持的安全策略
         /// </summary>
         /// <value>The security policies.</value>
         /// <remarks>
@@ -1236,11 +1238,12 @@ namespace Opc.Ua
         {
             Initialize();
         }
-		#endregion
-        
-		#region Persistent Properties
+        #endregion
+
+        #region Persistent Properties
         /// <summary>
         /// The user tokens accepted by the server.
+        /// 服务器接受的用户令牌
         /// </summary>
         /// <value>The user token policies.</value>
         [DataMember(IsRequired = false, EmitDefaultValue = false, Order = 3)]
@@ -1264,6 +1267,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Whether diagnostics are enabled.
+        /// 是否启用诊断
         /// </summary>
         /// <value><c>true</c> if diagnostic is enabled; otherwise, <c>false</c>.</value>
         [DataMember(IsRequired=false, Order=4)]
@@ -1275,6 +1279,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of open sessions.
+        /// 最大打开会话数
         /// </summary>
         /// <value>The maximum session count.</value>
         [DataMember(IsRequired=false, Order=5)]
@@ -1283,9 +1288,10 @@ namespace Opc.Ua
             get { return m_maxSessionCount;  }
             set { m_maxSessionCount = value; }
         }
-        
+
         /// <summary>
         /// That minimum period of that a session is allowed to remain open without communication from the client (in milliseconds).
+        /// 允许该会话在与客户端断开时（单位毫秒）仍然保持连接的最小时间
         /// </summary>
         /// <value>The minimum session timeout.</value>
         [DataMember(IsRequired=false, Order=6)]
@@ -1308,6 +1314,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of continuation points used for Browse/BrowseNext operations.
+        /// 用于Browse / BrowseNext操作的连续点的最大数量
         /// </summary>
         /// <value>The maximum number of continuation points used for Browse/BrowseNext operations</value>
         [DataMember(IsRequired=false, Order=8)]
@@ -1319,6 +1326,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of continuation points used for Query/QueryNext operations.
+        /// 用于Query / QueryNext操作的连续点的最大数量
         /// </summary>
         /// <value>The maximum number of query continuation points.</value>
         [DataMember(IsRequired=false, Order=9)]
@@ -1330,6 +1338,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of continuation points used for HistoryRead operations.
+        /// 用于HistoryRead操作的最大连续点数
         /// </summary>
         /// <value>The maximum number of  history continuation points.</value>
         [DataMember(IsRequired=false, Order=10)]
@@ -1341,6 +1350,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum age of an incoming request (old requests are rejected).
+        /// 传入请求的最大年龄（旧请求被拒绝）
         /// </summary>
         /// <value>The maximum age of an incoming request.</value>
         [DataMember(IsRequired=false, Order=11)]
@@ -1352,6 +1362,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The minimum publishing interval supported by the server (in milliseconds).
+        /// 服务器支持的最小发布间隔（以毫秒为单位）
         /// </summary>
         /// <value>The minimum publishing interval.</value>
         [DataMember(IsRequired=false, Order=12)]
@@ -1363,6 +1374,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum publishing interval supported by the server (in milliseconds).
+        /// 服务器支持的最大发布间隔（以毫秒为单位）
         /// </summary>
         /// <value>The maximum publishing interval.</value>
         [DataMember(IsRequired=false, Order=13)]
@@ -1374,6 +1386,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The minimum difference between supported publishing interval (in milliseconds).
+        /// 支持的发布间隔（以毫秒为单位）的最小差异
         /// </summary>
         /// <value>The publishing resolution.</value>
         [DataMember(IsRequired=false, Order=14)]
@@ -1385,6 +1398,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// How long the subscriptions will remain open without a publish from the client.
+        /// 订阅将在没有客户端发布的情况下保持打开多长时间
         /// </summary>
         /// <value>The maximum subscription lifetime.</value>
         [DataMember(IsRequired=false, Order=15)]
@@ -1396,6 +1410,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of messages saved in the queue for each subscription.
+        /// 每个订阅队列中保存的最大消息数
         /// </summary>
         /// <value>The maximum size of the  message queue.</value>
         [DataMember(IsRequired=false, Order=16)]
@@ -1407,6 +1422,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of notificates saved in the queue for each monitored item.
+        /// 为每个被监视项目保存在队列中的最大证书数
         /// </summary>
         /// <value>The maximum size of the notification queue.</value>
         [DataMember(IsRequired=false, Order=17)]
@@ -1418,6 +1434,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum number of notifications per publish.
+        /// 每次发布的最大通知数
         /// </summary>
         /// <value>The maximum number of notifications per publish.</value>
         [DataMember(IsRequired=false, Order=18)]
@@ -1429,6 +1446,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The minimum sampling interval for metadata.
+        /// 元数据的最小采样间隔
         /// </summary>
         /// <value>The minimum sampling interval for metadata.</value>
         [DataMember(IsRequired=false, Order=19)]
@@ -1440,6 +1458,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The available sampling rates.
+        /// 可用的采样率
         /// </summary>
         /// <value>The available sampling rates.</value>
         [DataMember(IsRequired = false, EmitDefaultValue = false, Order = 20)]
@@ -1462,6 +1481,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The maximum time between registration attempts (in milliseconds).
+        /// 两次注册尝试之间的最大时间（以毫秒为单位）
         /// </summary>
         /// <value>The maximum time between registration attempts (in milliseconds).</value>
         [DataMember(IsRequired=false, Order=22)]
@@ -1473,6 +1493,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The path to the file containing nodes persisted by the core node manager.
+        /// 包含节点的文件的路径由核心节点管理器持久化
         /// </summary>
         /// <value>The path to the file containing nodes persisted by the core node manager.</value>
         [DataMember(IsRequired=false, Order=23)]

@@ -22,6 +22,7 @@ namespace WindowsFormsAppServer
         private void Form1_Load(object sender, EventArgs e)
         {
             server = new OpcUaServer("opc.tcp://localhost:62547/DataAccessServer",new DataAccessServer());//117.48.203.204
+            server.AppConfig.TraceConfiguration.OutputFilePath = Application.StartupPath + @"\Logs\Opc.Ua.Huibo.txt";
             StandardServer server2 = server.AppInstance.Server as StandardServer;
             serverDiagnosticsCtrl1.Initialize(server2, server.AppConfig);
         }

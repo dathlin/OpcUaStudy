@@ -22,6 +22,17 @@ namespace WindowsFormsAppServer
     /// </remarks>
     public partial class DataAccessServer : StandardServer
     {
+        #region Constructors
+        
+        public DataAccessServer()
+        {
+            // 添加允许登录的用户名
+            DictionaryIdentity.Add("admin", "123456");
+            DictionaryIdentity.Add("hushaolin", "1234567890");
+        }
+        
+        #endregion
+
         #region Public Interface
         /// <summary>
         /// Returns the current server instance.
@@ -78,6 +89,8 @@ namespace WindowsFormsAppServer
             return properties;
         }
 
+
+
         /// <summary>
         /// 服务器启动之后将会调用的方法
         /// </summary>
@@ -90,9 +103,9 @@ namespace WindowsFormsAppServer
             // 更改用户身份时请求通知。 默认情况下接受所有有效用户
             server.SessionManager.ImpersonateUser += new ImpersonateEventHandler(SessionManager_ImpersonateUser);
 
-            //添加允许登录的用户名
 
         }
+        
 
 
         /// <summary>
@@ -127,13 +140,13 @@ namespace WindowsFormsAppServer
 
             if (String.IsNullOrEmpty(password))
             {
-                // an empty password is not accepted.
+                // 空的密码不被允许
                 throw ServiceResultException.Create(StatusCodes.BadIdentityTokenRejected,
                     "Security token is not a valid username token. An empty password is not accepted.");
             }
 
 
-            if (!DictIdentity.ContainsKey(userName))
+            if (!DictionaryIdentity.ContainsKey(userName))
             {
                 // 账户名验证失败
                 throw ServiceResultException.Create(StatusCodes.BadUserAccessDenied,
@@ -141,33 +154,16 @@ namespace WindowsFormsAppServer
             }
 
 
-            if(DictIdentity[userName]!=password)
+            if(DictionaryIdentity[userName]!=password)
             {
-                // 
+                // 密码验证失败
                 throw ServiceResultException.Create(StatusCodes.BadUserAccessDenied,
                     "您输入的账户不存在，禁止登录");
             }
-
-            if (!((userName == "user1" && password == "password") ||
-                 (userName == "user2" && password == "password1")))
-            {
-                // construct translation object with default text.
-                TranslationInfo info = new TranslationInfo(
-                    "InvalidPassword",
-                    "en-US",
-                    "Invalid username or password.",
-                    userName);
-
-                // create an exception with a vendor defined sub-code.
-                throw new ServiceResultException(new ServiceResult(
-                    StatusCodes.BadUserAccessDenied,
-                    "InvalidPassword",
-                    "http://opcfoundation.org/UA/Sample/",
-                    new LocalizedText(info)));
-            }
+            
         }
 
-        private Dictionary<string, string> DictIdentity = new Dictionary<string, string>();
+        private Dictionary<string, string> DictionaryIdentity = new Dictionary<string, string>();
 
 
 
@@ -363,7 +359,7 @@ namespace WindowsFormsAppServer
             variable.UserWriteMask = AttributeWriteMask.DisplayName | AttributeWriteMask.Description;
             variable.DataType = dataType;
             variable.ValueRank = valueRank;
-            variable.AccessLevel = AccessLevels.CurrentReadOrWrite;
+            variable.AccessLevel = AccessLevels.CurrentRead;
             variable.UserAccessLevel = AccessLevels.CurrentReadOrWrite;
             variable.Historizing = false;
             variable.Value = defaultValue;
@@ -383,32 +379,7 @@ namespace WindowsFormsAppServer
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
 
 
 

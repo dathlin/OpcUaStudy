@@ -22,9 +22,10 @@ using System.Globalization;
 
 namespace Opc.Ua
 {
-	  /// <summary>
-	  /// Human readable qualified with a locale.
-	  /// </summary>
+    /// <summary>
+    /// Human readable qualified with a locale.
+    /// 符合人们阅读的本地化文本
+    /// </summary>
     /// <remarks>
     /// <para>
     /// The LocalizedText is defined in <b>Part 3 - Address Space Model, Section 7.5</b>, titled 

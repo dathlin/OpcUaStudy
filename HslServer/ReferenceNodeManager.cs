@@ -1283,16 +1283,6 @@ namespace OpcUaServer
             folder.ReferenceTypeId = ReferenceTypes.Organizes;
             folder.TypeDefinitionId = ObjectTypeIds.FolderType;
             folder.NodeId = new NodeId(path, NamespaceIndex);
-
-
-            if (times >= 0)
-            {
-                string temp = parent?.NodeId.ToString();
-                System.Windows.Forms.MessageBox.Show("值：" + temp + Environment.NewLine + "先：" + folder.NodeId.ToString());
-                times++;
-            }
-
-
             folder.BrowseName = new QualifiedName(path, NamespaceIndex);
             folder.DisplayName = new LocalizedText("en", name);
             folder.WriteMask = AttributeWriteMask.None;
@@ -1841,8 +1831,7 @@ namespace OpcUaServer
         {
             return CreateVariable(parent, path, name, (uint)dataType, valueRank);
         }
-
-        private int times = 0;
+        
 
         /// <summary>
         /// Creates a new variable.
@@ -1855,15 +1844,6 @@ namespace OpcUaServer
             variable.ReferenceTypeId = ReferenceTypes.Organizes;
             variable.TypeDefinitionId = VariableTypeIds.BaseDataVariableType;
             variable.NodeId = new NodeId(path, NamespaceIndex);
-
-            if (times == 0)
-            {
-                string temp = parent?.NodeId.ToString();
-                System.Windows.Forms.MessageBox.Show("值：" + temp + Environment.NewLine + "先：" + variable.NodeId.ToString());
-                times++;
-            }
-
-
             variable.BrowseName = new QualifiedName(path, NamespaceIndex);
             variable.DisplayName = new LocalizedText("en", name);
             variable.WriteMask = AttributeWriteMask.DisplayName | AttributeWriteMask.Description;

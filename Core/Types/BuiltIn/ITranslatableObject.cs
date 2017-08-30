@@ -75,6 +75,7 @@ namespace Opc.Ua
 
     /// <summary>
     /// Stores the information requires to translate a string.
+    /// 存储信息以便翻译一个字符串。
     /// </summary>
     public class TranslationInfo
     {
