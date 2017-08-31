@@ -207,7 +207,12 @@ namespace WindowsFormsAppServer
             {
                 m_configuration = new CustomerServerConfiguration();
             }
+
+            timer1 = new System.Timers.Timer(500);
+            timer1.Elapsed += Timer1_Elapsed;
+            timer1.Start();
         }
+
         #endregion
 
         #region IDisposable Members
@@ -232,6 +237,32 @@ namespace WindowsFormsAppServer
             return node.NodeId;
         }
         #endregion
+
+
+        #region Timer Tick
+
+        private System.Timers.Timer timer1 = null;
+
+
+
+        private void Timer1_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (list != null)
+            {
+                lock (Lock)
+                {
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        list[i].Value = list[i].Value + 1;
+                        // 下面这行代码非常的关键，涉及到更改之后会不会通知到客户端
+                        list[i].ClearChangeMasks(SystemContext, false);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
 
         #region INodeManager Members
         /// <summary>
@@ -262,21 +293,72 @@ namespace WindowsFormsAppServer
                 AddRootNotifier(rootMy);
 
                 string[] machines = new string[] { "Machine A", "Machine B", "Machine C" };
-                foreach (var m in machines)
+                list = new List<BaseDataVariableState<int>>();
+
+                for (int i = 0; i < machines.Length; i++)
                 {
-                    FolderState myFolder = CreateFolder(rootMy, m);
+                    FolderState myFolder = CreateFolder(rootMy, machines[i]);
 
                     CreateVariable(myFolder, "Name", DataTypeIds.String, ValueRanks.Scalar, "测试数据").Description = "设备的名称";
                     CreateVariable(myFolder, "IsFault", DataTypeIds.Boolean, ValueRanks.Scalar, true).Description = "设备是否启动";
                     CreateVariable(myFolder, "TestValueFloat", DataTypeIds.Float, ValueRanks.Scalar, 100.5f);
                     CreateVariable(myFolder, "AlarmTime", DataTypeIds.DateTime, ValueRanks.Scalar, DateTime.Now);
-                    CreateVariable(myFolder, "TestValueInt", DataTypeIds.Int32, ValueRanks.Scalar, 47123).OnSimpleWriteValue += OnWriteMyNode;
+                    list.Add(CreateVariable(myFolder, "TestValueInt", DataTypeIds.Int32, ValueRanks.Scalar, 47123));
+
+
+
+
+                    #region Add Method
+
+                    MethodState addMethod = CreateMethod(myFolder, "Calculate");
+                    // set input arguments
+                    addMethod.InputArguments = new PropertyState<Argument[]>(addMethod)
+                    {
+                        NodeId = new NodeId(addMethod.BrowseName.Name + "InArgs", NamespaceIndex),
+                        BrowseName = BrowseNames.InputArguments
+                    };
+                    addMethod.InputArguments.DisplayName = addMethod.InputArguments.BrowseName.Name;
+                    addMethod.InputArguments.TypeDefinitionId = VariableTypeIds.PropertyType;
+                    addMethod.InputArguments.ReferenceTypeId = ReferenceTypeIds.HasProperty;
+                    addMethod.InputArguments.DataType = DataTypeIds.Argument;
+                    addMethod.InputArguments.ValueRank = ValueRanks.OneDimension;
+
+                    addMethod.InputArguments.Value = new Argument[]
+                    {
+                        new Argument() { Name = "UInt32 value", Description = "UInt32 value",  DataType = DataTypeIds.UInt32, ValueRank = ValueRanks.Scalar },
+                        new Argument() { Name = "UInt32 value", Description = "UInt32 value",  DataType = DataTypeIds.UInt32, ValueRank = ValueRanks.Scalar }
+                    };
+
+                    // set output arguments
+                    addMethod.OutputArguments = new PropertyState<Argument[]>(addMethod);
+                    addMethod.OutputArguments.NodeId = new NodeId(addMethod.BrowseName.Name + "OutArgs", NamespaceIndex);
+                    addMethod.OutputArguments.BrowseName = BrowseNames.OutputArguments;
+                    addMethod.OutputArguments.DisplayName = addMethod.OutputArguments.BrowseName.Name;
+                    addMethod.OutputArguments.TypeDefinitionId = VariableTypeIds.PropertyType;
+                    addMethod.OutputArguments.ReferenceTypeId = ReferenceTypeIds.HasProperty;
+                    addMethod.OutputArguments.DataType = DataTypeIds.Argument;
+                    addMethod.OutputArguments.ValueRank = ValueRanks.OneDimension;
+
+                    addMethod.OutputArguments.Value = new Argument[]
+                    {
+                        new Argument() { Name = "Operater Result", Description = "Operater Result",  DataType = DataTypeIds.String, ValueRank = ValueRanks.Scalar }
+                    };
+                    addMethod.OnCallMethod = new GenericMethodCalledEventHandler(OnAddCall);
+
+                    #endregion
+
                 }
+
+
+
 
 
                 AddPredefinedNode(SystemContext, rootMy);
             }
         }
+
+
+        private List<BaseDataVariableState<int>> list = null;
 
 
 
@@ -289,7 +371,7 @@ namespace WindowsFormsAppServer
         /// <returns></returns>
         private ServiceResult OnWriteMyNode(ISystemContext context, NodeState node, ref object value)
         {
-           // System.Windows.Forms.MessageBox.Show("Received '" + value.ToString() + "'.");
+            // System.Windows.Forms.MessageBox.Show("Received '" + value.ToString() + "'.");
             return ServiceResult.Good;
         }
 
@@ -359,7 +441,7 @@ namespace WindowsFormsAppServer
             variable.UserWriteMask = AttributeWriteMask.DisplayName | AttributeWriteMask.Description;
             variable.DataType = dataType;
             variable.ValueRank = valueRank;
-            variable.AccessLevel = AccessLevels.CurrentRead;
+            variable.AccessLevel = AccessLevels.CurrentReadOrWrite;
             variable.UserAccessLevel = AccessLevels.CurrentReadOrWrite;
             variable.Historizing = false;
             variable.Value = defaultValue;
@@ -378,8 +460,38 @@ namespace WindowsFormsAppServer
 
 
 
+        /// <summary>
+        /// Creates a new method.
+        /// </summary>
+        private MethodState CreateMethod(NodeState parent, string name)
+        {
+            MethodState method = new MethodState(parent);
 
-        
+            method.SymbolicName = name;
+            method.ReferenceTypeId = ReferenceTypeIds.HasComponent;
+            if (parent == null)
+            {
+                method.NodeId = new NodeId(name, NamespaceIndex);
+            }
+            else
+            {
+                method.NodeId = new NodeId(parent.NodeId.ToString() + "/" + name);
+            }
+            method.BrowseName = new QualifiedName(name, NamespaceIndex);
+            method.DisplayName = new LocalizedText(name);
+            method.WriteMask = AttributeWriteMask.None;
+            method.UserWriteMask = AttributeWriteMask.None;
+            method.Executable = true;
+            method.UserExecutable = true;
+
+            if (parent != null)
+            {
+                parent.AddChild(method);
+            }
+
+            return method;
+        }
+
 
 
 
@@ -459,6 +571,32 @@ namespace WindowsFormsAppServer
 
 
 
+        private ServiceResult OnAddCall(
+            ISystemContext context,
+            MethodState method,
+            IList<object> inputArguments,
+            IList<object> outputArguments)
+        {
+            // all arguments must be provided.
+            if (inputArguments.Count < 2)
+            {
+                return StatusCodes.BadArgumentsMissing;
+            }
+
+            try
+            {
+                UInt32 floatValue = (UInt32)inputArguments[0];
+                UInt32 uintValue = (UInt32)inputArguments[1];
+
+                // set output parameter
+                outputArguments[0] = "我也不知道刚刚发生了什么，调用设备为：" + method.Parent.DisplayName;
+                return ServiceResult.Good;
+            }
+            catch
+            {
+                return new ServiceResult(StatusCodes.BadInvalidArgument);
+            }
+        }
 
     }
 

@@ -2453,6 +2453,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Clears the change masks.
+        /// 清除更改的掩码
         /// </summary>
         /// <param name="context">The context that describes how access the system containing the data..</param>
         /// <param name="includeChildren">if set to <c>true</c> clear masks recursively for all children..</param>

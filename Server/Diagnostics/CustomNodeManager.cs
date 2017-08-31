@@ -161,6 +161,7 @@ namespace Opc.Ua.Server
         #region Public Properties
         /// <summary>
         /// Acquires the lock on the node manager.
+        /// 节点管理器的操作锁
         /// </summary>
         public object Lock
         {
