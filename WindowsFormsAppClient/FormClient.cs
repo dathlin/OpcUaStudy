@@ -23,7 +23,7 @@ namespace WindowsFormsAppClient
             
             // use a default appConfig object
             // 使用了一个默认的配置对象
-            client = new OpcUaClient(false);
+            client = new OpcUaClient();
             client.OpcStatusChange += Client_OpcStatusChange;
             client.SetLogOutPut();
         }
@@ -150,6 +150,21 @@ namespace WindowsFormsAppClient
             stringBuilder.Append("]");
 
             textBox2.AppendText(stringBuilder.ToString()+ Environment.NewLine);
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (client.IsConnect)
+            {
+                // 单节点的测试
+                string name = client.CallMethodByNodeId(
+                    "ns=2;s=Machines/Machine B", 
+                    "ns=2;s=Machines/Machine B/Calculate",
+                    1233,
+                    4556
+                    )[0].ToString();
+                textBox2.AppendText(name + Environment.NewLine);
+            }
         }
     }
 }

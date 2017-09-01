@@ -40,14 +40,13 @@ namespace Opc.Ua.Client
 {
     /// <summary>
     /// A subscription
-    /// 一个数据订阅类
     /// </summary>
     [DataContract(Namespace = Namespaces.OpcUaXsd)]
     public class Subscription : IDisposable
     {
         #region Constructors
         /// <summary>
-        /// 使用默认参数初始化对象
+        /// Creates a empty object.
         /// </summary>
         public Subscription()
         {
@@ -56,14 +55,13 @@ namespace Opc.Ua.Client
         
         /// <summary>
         /// Initializes the subscription from a template.
-        /// 从一个模版初始化订阅
         /// </summary>
         public Subscription(Subscription template) : this(template, false)
         {
         }
 
         /// <summary>
-        /// 从模版初始化订阅
+        /// Initializes the subscription from a template.
         /// </summary>
         /// <param name="template">The template.</param>
         /// <param name="copyEventHandlers">if set to <c>true</c> the event handlers are copied.</param>
@@ -81,7 +79,6 @@ namespace Opc.Ua.Client
                 }
 
                 // remove any existing numeric suffix.
-                // 删除任何现有的数字后缀
                 int index = displayName.LastIndexOf(' ');
 
                 if (index != -1)
@@ -115,7 +112,7 @@ namespace Opc.Ua.Client
                 if (copyEventHandlers)
                 {
                     m_StateChanged               = template.m_StateChanged;
-                    m_PublishStatusChanged       = template.m_PublishStatusChanged;
+                    m_PublishStatusChanged        = template.m_PublishStatusChanged;
                     m_fastDataChangeCallback     = template.m_fastDataChangeCallback;
                     m_fastEventCallback          = template.m_fastEventCallback;
                 }
@@ -229,7 +226,6 @@ namespace Opc.Ua.Client
         #region Persistent Properties
         /// <summary>
         /// A display name for the subscription.
-        /// 该订阅的一个显示的名称
         /// </summary>
         [DataMember(Order = 1)]
         public string DisplayName
@@ -244,7 +240,6 @@ namespace Opc.Ua.Client
 
         /// <summary>
         /// The publishing interval.
-        /// 数据出版间隔，决定了数据的刷新频率
         /// </summary>
         [DataMember(Order = 2)]
         public int PublishingInterval
@@ -255,7 +250,6 @@ namespace Opc.Ua.Client
 
         /// <summary>
         /// The keep alive count.
-        /// 保持活动的数量
         /// </summary>
         [DataMember(Order = 3)]
         public uint KeepAliveCount
@@ -266,7 +260,6 @@ namespace Opc.Ua.Client
 
         /// <summary>
         /// The maximum number of notifications per publish request.
-        /// 每个发布请求的最大通知数
         /// </summary>
         [DataMember(Order = 4)]
         public uint LifetimeCount
@@ -277,7 +270,6 @@ namespace Opc.Ua.Client
 
         /// <summary>
         /// The maximum number of notifications per publish request.
-        /// 每个发布请求的最大通知数
         /// </summary>
         [DataMember(Order = 5)]
         public uint MaxNotificationsPerPublish
@@ -288,7 +280,6 @@ namespace Opc.Ua.Client
 
         /// <summary>
         /// Whether publishing is enabled.
-        /// 是否启用发布
         /// </summary>
         [DataMember(Order = 6)]
         public bool PublishingEnabled
@@ -299,7 +290,6 @@ namespace Opc.Ua.Client
 
         /// <summary>
         /// The priority assigned to subscription.
-        /// 分配给订阅的优先级
         /// </summary>
         [DataMember(Order = 7)]
         public byte Priority
@@ -307,10 +297,9 @@ namespace Opc.Ua.Client
             get { return m_priority;  }
             set { m_priority = value; }
         }
-
+        
         /// <summary>
         /// The timestamps to return with the notification messages.
-        /// 与通知消息一起返回的时间戳
         /// </summary>
         [DataMember(Order = 8)]
         public TimestampsToReturn TimestampsToReturn
@@ -318,10 +307,9 @@ namespace Opc.Ua.Client
             get { return m_timestampsToReturn;  }
             set { m_timestampsToReturn = value; }
         }
-
+        
         /// <summary>
         /// The maximum number of messages to keep in the internal cache.
-        /// 内部缓存中保留的最大消息数
         /// </summary>
         [DataMember(Order = 9)]
         public int MaxMessageCount
@@ -342,10 +330,9 @@ namespace Opc.Ua.Client
                 }
             }
         }
-
+        
         /// <summary>
         /// The default monitored item.
-        /// 默认监视项目
         /// </summary>
         [DataMember(Order = 10)]
         public MonitoredItem DefaultItem
@@ -356,7 +343,6 @@ namespace Opc.Ua.Client
 
         /// <summary>
         /// The minimum lifetime for subscriptions in milliseconds.
-        /// 订阅的最小生命周期（以毫秒为单位）
         /// </summary>
         [DataMember(Order = 11)]
         public uint MinLifetimeInterval
@@ -367,7 +353,6 @@ namespace Opc.Ua.Client
 
         /// <summary>
         /// Gets or sets a value indicating whether the notifications are cached within the monitored items.
-        /// 获取或设置一个值，指示通知是否在监视项目中缓存
         /// </summary>
         /// <value>
         /// 	<c>true</c> if monitored item cache is disabled; otherwise, <c>false</c>.

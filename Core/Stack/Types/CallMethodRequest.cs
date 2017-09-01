@@ -39,6 +39,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// Whether the value has been processed.
+        /// 是否已处理该值。
         /// </summary>
         public bool Processed
         {

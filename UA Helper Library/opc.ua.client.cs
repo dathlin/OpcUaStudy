@@ -11,30 +11,60 @@ using System.Windows.Forms;
 
 namespace Opc.Ua.Hsl
 {
+    /**********************************************************************************
+ * 
+ * 
+ *    版本：2017年8月30日 16:20:11
+ *    创建人：胡少林 <email>hsl200909@163.com</email>
+ *    说明：当前只实现了特定节点的读写和历史数据读写
+ *    
+ * 
+ *************************************************************************************/
+
+    /**********************************************************************************
+     * 
+     *    用法示例：
+     *    
+     *    
+     *    
+     * 
+     *********************************************************************************/
+
+
+
     /// <summary>
     /// 一个封装分opc ua的客户端
     /// </summary>
     public class OpcUaClient
     {
- 
+
         #region 构造方法初始化的方法 
 
         /// <summary>
-        /// 实例化一个对象，选择是否需要从本地文件进行配置客户端信息
+        /// 实例化一个对象，选择是否需要从本地文件进行配置客户端信息，如果是则需要提供后缀为xml的配置文件，否则使用默认的参数配置
         /// </summary>
-        /// <param name="isConfigLoadByFile">是否从文件中加载配置信息</param>
-        public OpcUaClient(bool isConfigLoadByFile)
+        public OpcUaClient()
         {
-            if (isConfigLoadByFile)
-            {
-                // 加载应用程序的配置
-                application.LoadApplicationConfiguration(false);
-            }
-            else
-            {
-                application.ApplicationConfiguration = GetDefaultApplicationConfig();
-            }
 
+
+            //application.InstallConfig = new InstalledApplication()
+            //{
+            //    ApplicationName = "OpcUaHuiBoTest2",
+            //    ApplicationType = Opc.Ua.Security.ApplicationType.Client_1,
+            //    DeleteCertificatesOnUninstall = true,
+            //    ConfigureFirewall = false,
+            //    SetConfigurationFilePermisions = false,
+            //    SetExecutableFilePermissions = false,
+            //    InstallAsService = false,
+            //    TraceConfiguration = new TraceConfiguration()
+            //    {
+            //        OutputFilePath = @"Logs\Client.txt",
+            //        DeleteOnLoad = true,
+            //        TraceMasks = 515,
+            //    },
+            //};
+            application = new ApplicationInstance();
+            application.ApplicationConfiguration = GetDefaultApplicationConfig();
             Initilization();
         }
         /// <summary>
@@ -43,9 +73,10 @@ namespace Opc.Ua.Hsl
         /// <param name="appConfig"></param>
         public OpcUaClient(ApplicationConfiguration appConfig)
         {
+            application = new ApplicationInstance();
             // 加载应用程序的配置
             application.ApplicationConfiguration = appConfig;
-            
+
             Initilization();
         }
 
@@ -63,7 +94,38 @@ namespace Opc.Ua.Hsl
 
 
             m_CertificateValidation = new CertificateValidationEventHandler(CertificateValidator_CertificateValidation);
-            
+
+        }
+
+        /// <summary>
+        /// Handles a certificate validation error.
+        /// 处理证书验证失败的情况
+        /// </summary>
+        private void CertificateValidator_CertificateValidation(CertificateValidator sender, CertificateValidationEventArgs e)
+        {
+            try
+            {
+                e.Accept = m_configuration.SecurityConfiguration.AutoAcceptUntrustedCertificates;
+
+                if (!m_configuration.SecurityConfiguration.AutoAcceptUntrustedCertificates)
+                {
+                    e.Accept = true;
+                    //if (!m_configuration.SecurityConfiguration.AutoAcceptUntrustedCertificates)
+                    //{
+                    //    DialogResult result = MessageBox.Show(
+                    //        e.Certificate.Subject,
+                    //        "Untrusted Certificate",
+                    //        MessageBoxButtons.YesNo,
+                    //        MessageBoxIcon.Warning);
+
+                    //    e.Accept = (result == DialogResult.Yes);
+                    //}
+                }
+            }
+            catch (Exception exception)
+            {
+                ClientUtils.HandleException(application.ApplicationName, exception);
+            }
         }
 
         #endregion
@@ -90,7 +152,7 @@ namespace Opc.Ua.Hsl
             }
             set
             {
-                if(!string.IsNullOrEmpty(value))
+                if (!string.IsNullOrEmpty(value))
                 {
                     m_configuration.ApplicationName = value;
                     application.ApplicationName = value;
@@ -198,8 +260,10 @@ namespace Opc.Ua.Hsl
 
         #endregion
 
-        #region 公开的方法
-        
+        #region 连接与断开
+
+        public bool IsConnect { get; set; }
+
         /// <summary>
         /// 连接到服务器
         /// </summary>
@@ -211,7 +275,7 @@ namespace Opc.Ua.Hsl
 
             // 先把当前的会话断开
             Disconnect();
-            
+
 
             if (m_configuration == null)
             {
@@ -241,6 +305,8 @@ namespace Opc.Ua.Hsl
             DoConnectComplete(null);
 
             PostInitializeSession();
+
+            IsConnect = true;
         }
 
 
@@ -281,6 +347,8 @@ namespace Opc.Ua.Hsl
                 m_session = null;
             }
 
+            IsConnect = false;
+
             // 引发一个事件
             DoConnectComplete(null);
         }
@@ -298,139 +366,6 @@ namespace Opc.Ua.Hsl
             }
         }
 
-        /// <summary>
-        /// 在系统连接之前调用，配置为日志输出
-        /// </summary>
-        public void SetLogOutPut()
-        {
-            m_configuration.TraceConfiguration.OutputFilePath = @"Logs\OpcUaHslClientLog.txt";
-            m_configuration.TraceConfiguration.DeleteOnLoad = true;
-            m_configuration.TraceConfiguration.TraceMasks = 515;
-        }
-
-
-        #endregion
-
-        #region 私有的方法
-        private ApplicationConfiguration GetDefaultApplicationConfig()
-        {
-
-
-            ApplicationConfiguration config = new ApplicationConfiguration()
-            {
-                ApplicationName = "OpcUaHslClient",
-                ApplicationType = ApplicationType.Client
-            };
-            SecurityConfiguration sConfig = new SecurityConfiguration()
-            {
-                ApplicationCertificate = new CertificateIdentifier()
-                {
-                    StoreType = "Directory",
-                    StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\MachineDefault",
-                    SubjectName = config.ApplicationName,
-                },
-
-                TrustedPeerCertificates = new CertificateTrustList()
-                {
-                    StoreType = "Directory",
-                    StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\UA Applications",
-                },
-
-                TrustedIssuerCertificates = new CertificateTrustList()
-                {
-                    StoreType = "Directory",
-                    StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\UA Certificate Authorities",
-                },
-
-                RejectedCertificateStore = new CertificateStoreIdentifier()
-                {
-                    StoreType = "Directory",
-                    StorePath = @"% CommonApplicationData%\OPC Foundation\CertificateStores\RejectedCertificates"
-                },
-                AutoAcceptUntrustedCertificates = true,
-            };
-            config.SecurityConfiguration = sConfig;
-
-
-
-            config.TransportConfigurations = new TransportConfigurationCollection();
-            config.TransportQuotas = new TransportQuotas();
-            config.ClientConfiguration = new ClientConfiguration();
-            config.TraceConfiguration = new TraceConfiguration()
-            {
-                OutputFilePath = null,
-                DeleteOnLoad = false,
-                TraceMasks = 515,
-            };
-
-
-
-            var certificateValidator = new CertificateValidator();
-            certificateValidator.CertificateValidation += (sender, eventArgs) =>
-            {
-                if (ServiceResult.IsGood(eventArgs.Error))
-                    eventArgs.Accept = true;
-                else if ((eventArgs.Error.StatusCode.Code == StatusCodes.BadCertificateUntrusted) && true)
-                    eventArgs.Accept = true;
-                else
-                    throw new Exception(string.Format("Failed to validate certificate with error code {0}: {1}", eventArgs.Error.Code, eventArgs.Error.AdditionalInfo));
-            };
-
-            config.CertificateValidator = certificateValidator;
-            config.CertificateValidator.Update(config);
-            return config;
-        }
-
-        /// <summary>
-        /// Handles a keep alive event from a session.
-        /// 处理会话中维持状态的事件
-        /// </summary>
-        private void Session_KeepAlive(Session session, KeepAliveEventArgs e)
-        {
-            try
-            {
-                // 检查会话是否已经被丢弃
-                if (!ReferenceEquals(session, m_session))
-                {
-                    return;
-                }
-
-                // start reconnect sequence on communication error.
-                // 当通信出错的时候进行重连
-                if (ServiceResult.IsBad(e.Status))
-                {
-                    if (m_reconnectPeriod <= 0)
-                    {
-                        UpdateStatus(true, e.CurrentTime, "Communication Error ({0})", e.Status);
-                        return;
-                    }
-
-                    UpdateStatus(true, e.CurrentTime, "Reconnecting in {0}s", m_reconnectPeriod);
-
-                    if (m_reconnectHandler == null)
-                    {
-                        m_ReconnectStarting?.Invoke(this, e);
-
-                        m_reconnectHandler = new SessionReconnectHandler();
-                        m_reconnectHandler.BeginReconnect(m_session, m_reconnectPeriod * 1000, Server_ReconnectComplete);
-                    }
-
-                    return;
-                }
-
-                // update status.
-                // 更新状态
-                UpdateStatus(false, e.CurrentTime, "Connected [{0}]", session.Endpoint.EndpointUrl);
-
-                // raise any additional notifications.
-                // 触发保持成功状态的事件，相当于心跳机制确认
-                m_KeepAliveComplete?.Invoke(this, e);
-            }
-            catch (Exception exception)
-            {
-                ClientUtils.HandleException(application.ApplicationName, exception);
-            }
-        }
 
         /// <summary>
         /// Handles a reconnect event complete from the reconnect handler.
@@ -461,6 +396,7 @@ namespace Opc.Ua.Hsl
             }
         }
 
+
         /// <summary>
         /// Raises the connect complete event on the main GUI thread.
         /// 引发一个连接完成事件
@@ -470,25 +406,6 @@ namespace Opc.Ua.Hsl
             m_ConnectComplete?.Invoke(this, null);
         }
 
-        /// <summary>
-        /// 更新当前系统连接的状态
-        /// </summary>
-        /// <param name="error">指示该状态是否代表了一个错误</param>
-        /// <param name="time">状态发生时的时间</param>
-        /// <param name="status">状态消息</param>
-        /// <param name="args">用于格式化状态消息的参数</param>
-        private void UpdateStatus(bool error, DateTime time, string status, params object[] args)
-        {
-            OpcStausEventArgs e = new OpcStausEventArgs()
-            {
-                IsError = error,
-                OccurTime = time.ToLocalTime(),
-                Status = String.Format(status, args)
-            };
-
-            //触发事件
-            m_OpcStatusChange?.Invoke(this, e);
-        }
 
         private EndpointDescription SelectEndpoint(string discoveryUrl, bool useSecurity)
         {
@@ -585,30 +502,147 @@ namespace Opc.Ua.Hsl
 
 
 
+
+        #endregion
+
+        #region 默认配置工具
+        private ApplicationConfiguration GetDefaultApplicationConfig()
+        {
+            ApplicationConfiguration config = new ApplicationConfiguration()
+            {
+                ApplicationName = "OpcUaHslClient",
+                ApplicationType = ApplicationType.Client
+            };
+            SecurityConfiguration sConfig = new SecurityConfiguration()
+            {
+                ApplicationCertificate = new CertificateIdentifier()
+                {
+                    StoreType = "Directory",
+                    StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\MachineDefault",
+                    SubjectName = config.ApplicationName,
+                },
+
+                TrustedPeerCertificates = new CertificateTrustList()
+                {
+                    StoreType = "Directory",
+                    StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\UA Applications",
+                },
+
+                TrustedIssuerCertificates = new CertificateTrustList()
+                {
+                    StoreType = "Directory",
+                    StorePath = @"%CommonApplicationData%\OPC Foundation\CertificateStores\UA Certificate Authorities",
+                },
+
+                RejectedCertificateStore = new CertificateStoreIdentifier()
+                {
+                    StoreType = "Directory",
+                    StorePath = @"% CommonApplicationData%\OPC Foundation\CertificateStores\RejectedCertificates"
+                },
+                AutoAcceptUntrustedCertificates = true,
+            };
+            config.SecurityConfiguration = sConfig;
+
+            config.ServerConfiguration = new ServerConfiguration
+            {
+                MaxSubscriptionCount = 100,
+                MaxMessageQueueSize = 10,
+                MaxNotificationQueueSize = 100,
+                MaxPublishRequestCount = 100
+            };
+
+            config.TransportConfigurations = new TransportConfigurationCollection();
+            config.TransportQuotas = new TransportQuotas
+            {
+                OperationTimeout = 600000,
+                MaxStringLength = 1048576,
+                MaxByteStringLength = 1048576,
+                MaxArrayLength = 65535,
+                MaxMessageSize = 4194304,
+                MaxBufferSize = 65535,
+                ChannelLifetime = 600000,
+                SecurityTokenLifetime = 3600000
+            };
+            config.ClientConfiguration = new ClientConfiguration
+            {
+                DefaultSessionTimeout = 60000,
+                MinSubscriptionLifetime = 10000,
+            };
+            config.TraceConfiguration = new TraceConfiguration()
+            {
+                OutputFilePath = null,
+                DeleteOnLoad = false,
+                TraceMasks = 515,
+            };
+            config.DisableHiResClock = true;
+
+
+            var certificateValidator = new CertificateValidator();
+
+            // 以下部分非常关键，涉及到是否引发异常
+            certificateValidator.CertificateValidation += (sender, eventArgs) =>
+            {
+                if (ServiceResult.IsGood(eventArgs.Error))
+                    eventArgs.Accept = true;
+                else if ((eventArgs.Error.StatusCode.Code == StatusCodes.BadCertificateUntrusted) && true)
+                    eventArgs.Accept = true;
+                else
+                    throw new Exception(string.Format("Failed to validate certificate with error code {0}: {1}", eventArgs.Error.Code, eventArgs.Error.AdditionalInfo));
+            };
+
+            config.CertificateValidator = certificateValidator;
+            config.CertificateValidator.Update(config);
+            return config;
+        }
+
+
+        #endregion
+
+        #region 会话状态处理
         /// <summary>
-        /// Handles a certificate validation error.
-        /// 处理整数验证失败的情况
+        /// Handles a keep alive event from a session.
+        /// 处理会话中维持状态的事件
         /// </summary>
-        private void CertificateValidator_CertificateValidation(CertificateValidator sender, CertificateValidationEventArgs e)
+        private void Session_KeepAlive(Session session, KeepAliveEventArgs e)
         {
             try
             {
-                e.Accept = m_configuration.SecurityConfiguration.AutoAcceptUntrustedCertificates;
-
-                if (!m_configuration.SecurityConfiguration.AutoAcceptUntrustedCertificates)
+                // 检查会话是否已经被丢弃
+                if (!ReferenceEquals(session, m_session))
                 {
-                    //e.Accept = true;
-                    if (!m_configuration.SecurityConfiguration.AutoAcceptUntrustedCertificates)
-                    {
-                        DialogResult result = MessageBox.Show(
-                            e.Certificate.Subject,
-                            "Untrusted Certificate",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Warning);
-
-                        e.Accept = (result == DialogResult.Yes);
-                    }
+                    return;
                 }
+
+                // start reconnect sequence on communication error.
+                // 当通信出错的时候进行重连
+                if (ServiceResult.IsBad(e.Status))
+                {
+                    if (m_reconnectPeriod <= 0)
+                    {
+                        UpdateStatus(true, e.CurrentTime, "Communication Error ({0})", e.Status);
+                        return;
+                    }
+
+                    UpdateStatus(true, e.CurrentTime, "Reconnecting in {0}s", m_reconnectPeriod);
+
+                    if (m_reconnectHandler == null)
+                    {
+                        m_ReconnectStarting?.Invoke(this, e);
+
+                        m_reconnectHandler = new SessionReconnectHandler();
+                        m_reconnectHandler.BeginReconnect(m_session, m_reconnectPeriod * 1000, Server_ReconnectComplete);
+                    }
+
+                    return;
+                }
+
+                // update status.
+                // 更新状态
+                UpdateStatus(false, e.CurrentTime, "Connected [{0}]", session.Endpoint.EndpointUrl);
+
+                // raise any additional notifications.
+                // 触发保持成功状态的事件，相当于心跳机制确认
+                m_KeepAliveComplete?.Invoke(this, e);
             }
             catch (Exception exception)
             {
@@ -616,8 +650,44 @@ namespace Opc.Ua.Hsl
             }
         }
 
-        
 
+
+
+        /// <summary>
+        /// 更新当前系统连接的状态
+        /// </summary>
+        /// <param name="error">指示该状态是否代表了一个错误</param>
+        /// <param name="time">状态发生时的时间</param>
+        /// <param name="status">状态消息</param>
+        /// <param name="args">用于格式化状态消息的参数</param>
+        private void UpdateStatus(bool error, DateTime time, string status, params object[] args)
+        {
+            OpcStausEventArgs e = new OpcStausEventArgs()
+            {
+                IsError = error,
+                OccurTime = time.ToLocalTime(),
+                Status = String.Format(status, args)
+            };
+
+            //触发事件
+            m_OpcStatusChange?.Invoke(this, e);
+        }
+
+
+
+
+
+
+
+
+
+        #endregion
+
+        #region 私有的方法
+
+        /// <summary>
+        /// 用于初始化服务器节点的根节点
+        /// </summary>
         private void PostInitializeSession()
         {
             var node = m_session.NodeCache.Find(ObjectIds.ObjectsFolder);
@@ -625,14 +695,23 @@ namespace Opc.Ua.Hsl
         }
 
 
+        #endregion
+
+        #region 日志配置
+
         /// <summary>
-        /// Gets the root node of the server
+        /// 在系统连接之前调用，配置为日志输出
         /// </summary>
-        private NodeId RootNode { get; set; }
+        public void SetLogOutPut()
+        {
+            m_configuration.TraceConfiguration.OutputFilePath = @"Logs\OpcUaHslClientLog.txt";
+            m_configuration.TraceConfiguration.DeleteOnLoad = true;
+            m_configuration.TraceConfiguration.TraceMasks = 515;
+        }
 
         #endregion
 
-        #region 公开的读写操作
+        #region 单节点读写操作
 
         /// <summary>
         /// 格式  ns=2;s=Devices/DynamicValue
@@ -665,7 +744,7 @@ namespace Opc.Ua.Hsl
             ClientBase.ValidateResponse(results, nodesToRead);
             ClientBase.ValidateDiagnosticInfos(diagnosticInfos, nodesToRead);
 
-            return  (T)results[0].Value;
+            return (T)results[0].Value;
         }
 
         /// <summary>
@@ -676,7 +755,7 @@ namespace Opc.Ua.Hsl
         public IEnumerable<DataValue> ReadNodes(string[] urls)
         {
             ReadValueIdCollection nodesToRead = new ReadValueIdCollection();
-            for(int i=0;i<urls.Length;i++)
+            for (int i = 0; i < urls.Length; i++)
             {
                 nodesToRead.Add(new ReadValueId()
                 {
@@ -697,7 +776,7 @@ namespace Opc.Ua.Hsl
             ClientBase.ValidateResponse(results, nodesToRead);
             ClientBase.ValidateDiagnosticInfos(diagnosticInfos, nodesToRead);
 
-            foreach(var v in results)
+            foreach (var v in results)
             {
                 yield return v;
             }
@@ -751,9 +830,9 @@ namespace Opc.Ua.Hsl
         {
             WriteValueCollection valuesToWrite = new WriteValueCollection();
 
-            for(int i=0;i<urls.Length;i++)
+            for (int i = 0; i < urls.Length; i++)
             {
-                if(i<values.Length)
+                if (i < values.Length)
                 {
                     WriteValue valueToWrite = new WriteValue()
                     {
@@ -779,7 +858,7 @@ namespace Opc.Ua.Hsl
             ClientBase.ValidateDiagnosticInfos(diagnosticInfos, valuesToWrite);
 
             bool result = true;
-            foreach(var r in results)
+            foreach (var r in results)
             {
                 if (StatusCode.IsBad(r))
                 {
@@ -802,10 +881,9 @@ namespace Opc.Ua.Hsl
             var node = new NodeId(url);
 
 
-
             var sub = new Subscription
             {
-                PublishingInterval =0,
+                PublishingInterval = 0,
                 PublishingEnabled = true,
                 LifetimeCount = 0,
                 KeepAliveCount = 0,
@@ -835,12 +913,12 @@ namespace Opc.Ua.Hsl
                 if (notification == null) return;//如果为空就退出
                 var t = notification.Value.WrappedValue.Value;
                 Action unsubscribe = () =>
-                   {
-                       sub.RemoveItems(sub.MonitoredItems);
-                       sub.Delete(true);
-                       m_session.RemoveSubscription(sub);
-                       sub.Dispose();
-                   };
+                {
+                    sub.RemoveItems(sub.MonitoredItems);
+                    sub.Delete(true);
+                    m_session.RemoveSubscription(sub);
+                    sub.Dispose();
+                };
                 callback((T)t, unsubscribe);
             };
 
@@ -854,8 +932,8 @@ namespace Opc.Ua.Hsl
 
         #endregion
 
-
         #region 读取历史数据
+
         /// <summary>
         /// 读取一连串的历史数据
         /// </summary>
@@ -903,7 +981,7 @@ namespace Opc.Ua.Hsl
             }
 
             HistoryData values = ExtensionObject.ToEncodeable(results[0].HistoryData) as HistoryData;
-            foreach(var value in values.DataValues)
+            foreach (var value in values.DataValues)
             {
                 yield return value;
             }
@@ -965,14 +1043,236 @@ namespace Opc.Ua.Hsl
 
         #endregion
 
+        #region 调用方法
 
+        public object[] CallMethodByNodeId(string urlParent, string url, params object[] args)
+        {
+            if (m_session == null)
+            {
+                return null;
+            }
+
+            IList<object> outputArguments = m_session.Call(
+                new NodeId(urlParent),
+                new NodeId(url),
+                args);
+
+            return outputArguments.ToArray();
+        }
+
+
+        #endregion
+
+        #region 浏览节点数据
+
+        /// <summary>
+        /// 浏览一个节点的引用
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public ReferenceDescription[] BrowseNodeReference(string url)
+        {
+            NodeId sourceId = new NodeId(url);
+
+            // 该节点可以读取到方法
+            BrowseDescription nodeToBrowse1 = new BrowseDescription();
+
+            nodeToBrowse1.NodeId = sourceId;
+            nodeToBrowse1.BrowseDirection = BrowseDirection.Forward;
+            nodeToBrowse1.ReferenceTypeId = ReferenceTypeIds.Aggregates;
+            nodeToBrowse1.IncludeSubtypes = true;
+            nodeToBrowse1.NodeClassMask = (uint)(NodeClass.Object | NodeClass.Variable | NodeClass.Method);
+            nodeToBrowse1.ResultMask = (uint)BrowseResultMask.All;
+
+            // 该节点无论怎么样都读取不到方法
+            // find all nodes organized by the node.
+            BrowseDescription nodeToBrowse2 = new BrowseDescription();
+
+            nodeToBrowse2.NodeId = sourceId;
+            nodeToBrowse2.BrowseDirection = BrowseDirection.Forward;
+            nodeToBrowse2.ReferenceTypeId = ReferenceTypeIds.Organizes;
+            nodeToBrowse2.IncludeSubtypes = true;
+            nodeToBrowse2.NodeClassMask = (uint)(NodeClass.Object | NodeClass.Variable);
+            nodeToBrowse2.ResultMask = (uint)BrowseResultMask.All;
+
+            BrowseDescriptionCollection nodesToBrowse = new BrowseDescriptionCollection();
+            nodesToBrowse.Add(nodeToBrowse1);
+            nodesToBrowse.Add(nodeToBrowse2);
+
+            // fetch references from the server.
+            ReferenceDescriptionCollection references = FormUtils.Browse(m_session, nodesToBrowse, false);
+
+            return references.ToArray();
+        }
+
+        #endregion
+
+        #region 读取一个节点的属性
+
+        /// <summary>
+        /// 读取一个节点的所有属性
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public OpcNodeAttribute[] ReadNoteAttributes(string url)
+        {
+            NodeId sourceId = new NodeId(url);
+            ReadValueIdCollection nodesToRead = new ReadValueIdCollection();
+
+            // attempt to read all possible attributes.
+            // 尝试着去读取所有可能的特性
+            for (uint ii = Attributes.NodeClass; ii <= Attributes.UserExecutable; ii++)
+            {
+                ReadValueId nodeToRead = new ReadValueId();
+                nodeToRead.NodeId = sourceId;
+                nodeToRead.AttributeId = ii;
+                nodesToRead.Add(nodeToRead);
+            }
+
+            int startOfProperties = nodesToRead.Count;
+
+            // find all of the pror of the node.
+            BrowseDescription nodeToBrowse1 = new BrowseDescription();
+
+            nodeToBrowse1.NodeId = sourceId;
+            nodeToBrowse1.BrowseDirection = BrowseDirection.Forward;
+            nodeToBrowse1.ReferenceTypeId = ReferenceTypeIds.HasProperty;
+            nodeToBrowse1.IncludeSubtypes = true;
+            nodeToBrowse1.NodeClassMask = 0;
+            nodeToBrowse1.ResultMask = (uint)BrowseResultMask.All;
+
+            BrowseDescriptionCollection nodesToBrowse = new BrowseDescriptionCollection();
+            nodesToBrowse.Add(nodeToBrowse1);
+
+            // fetch property references from the server.
+            ReferenceDescriptionCollection references = FormUtils.Browse(m_session, nodesToBrowse, false);
+
+            if (references == null)
+            {
+                return new OpcNodeAttribute[0];
+            }
+
+            for (int ii = 0; ii < references.Count; ii++)
+            {
+                // ignore external references.
+                if (references[ii].NodeId.IsAbsolute)
+                {
+                    continue;
+                }
+
+                ReadValueId nodeToRead = new ReadValueId();
+                nodeToRead.NodeId = (NodeId)references[ii].NodeId;
+                nodeToRead.AttributeId = Attributes.Value;
+                nodesToRead.Add(nodeToRead);
+            }
+
+            // read all values.
+            DataValueCollection results = null;
+            DiagnosticInfoCollection diagnosticInfos = null;
+
+            m_session.Read(
+                null,
+                0,
+                TimestampsToReturn.Neither,
+                nodesToRead,
+                out results,
+                out diagnosticInfos);
+
+            ClientBase.ValidateResponse(results, nodesToRead);
+            ClientBase.ValidateDiagnosticInfos(diagnosticInfos, nodesToRead);
+
+            // process results.
+
+
+            List<OpcNodeAttribute> nodeAttribute = new List<OpcNodeAttribute>();
+            for (int ii = 0; ii < results.Count; ii++)
+            {
+                OpcNodeAttribute item = new OpcNodeAttribute();
+
+                // process attribute value.
+                if (ii < startOfProperties)
+                {
+                    // ignore attributes which are invalid for the node.
+                    if (results[ii].StatusCode == StatusCodes.BadAttributeIdInvalid)
+                    {
+                        continue;
+                    }
+
+                    // get the name of the attribute.
+                    item.Name = Attributes.GetBrowseName(nodesToRead[ii].AttributeId);
+
+                    // display any unexpected error.
+                    if (StatusCode.IsBad(results[ii].StatusCode))
+                    {
+                        item.Type = Utils.Format("{0}", Attributes.GetDataTypeId(nodesToRead[ii].AttributeId));
+                        item.Value = Utils.Format("{0}", results[ii].StatusCode);
+                    }
+
+                    // display the value.
+                    else
+                    {
+                        TypeInfo typeInfo = TypeInfo.Construct(results[ii].Value);
+
+                        item.Type = typeInfo.BuiltInType.ToString();
+
+                        if (typeInfo.ValueRank >= ValueRanks.OneOrMoreDimensions)
+                        {
+                            item.Type += "[]";
+                        }
+
+                        item.Value = results[ii].Value;//Utils.Format("{0}", results[ii].Value);
+                    }
+                }
+
+                // process property value.
+                else
+                {
+                    // ignore properties which are invalid for the node.
+                    if (results[ii].StatusCode == StatusCodes.BadNodeIdUnknown)
+                    {
+                        continue;
+                    }
+
+                    // get the name of the property.
+                    item.Name = Utils.Format("{0}", references[ii - startOfProperties]);
+
+                    // display any unexpected error.
+                    if (StatusCode.IsBad(results[ii].StatusCode))
+                    {
+                        item.Type = String.Empty;
+                        item.Value = Utils.Format("{0}", results[ii].StatusCode);
+                    }
+
+                    // display the value.
+                    else
+                    {
+                        TypeInfo typeInfo = TypeInfo.Construct(results[ii].Value);
+
+                        item.Type = typeInfo.BuiltInType.ToString();
+
+                        if (typeInfo.ValueRank >= ValueRanks.OneOrMoreDimensions)
+                        {
+                            item.Type += "[]";
+                        }
+
+                        item.Value = results[ii].Value; //Utils.Format("{0}", results[ii].Value);
+                    }
+                }
+
+                nodeAttribute.Add(item);
+            }
+
+            return nodeAttribute.ToArray();
+        }
+
+        #endregion
 
         #region 私有对象
 
-        private readonly IDictionary<string, NodeId> _nodesCache = new Dictionary<string, NodeId>();
-        private readonly IDictionary<string, IList<NodeId>> _folderCache = new Dictionary<string, IList<NodeId>>();
+        // private readonly IDictionary<string, NodeId> _nodesCache = new Dictionary<string, NodeId>();
+        // private readonly IDictionary<string, IList<NodeId>> _folderCache = new Dictionary<string, IList<NodeId>>();
 
-        private ApplicationInstance application = new ApplicationInstance();
+        private ApplicationInstance application;
 
         private ApplicationConfiguration m_configuration;
         private Session m_session;
@@ -992,6 +1292,11 @@ namespace Opc.Ua.Hsl
         private EventHandler<OpcStausEventArgs> m_OpcStatusChange;
 
         private CertificateValidationEventHandler m_CertificateValidation;
+
+        /// <summary>
+        /// Gets the root node of the server
+        /// </summary>
+        private NodeId RootNode { get; set; }
 
         #endregion
 

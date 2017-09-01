@@ -3208,10 +3208,9 @@ namespace Opc.Ua.Client
             return responseHeader;
         }
         #endregion
-
+               
         /// <summary>
         /// Calls the specified method and returns the output arguments.
-        /// 调用指定的方法并返回输出参数
         /// </summary>
         /// <param name="objectId">The NodeId of the object that provides the method.</param>
         /// <param name="methodId">The NodeId of the method to call.</param>

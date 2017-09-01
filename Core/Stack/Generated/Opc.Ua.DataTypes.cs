@@ -30237,13 +30237,14 @@ namespace Opc.Ua
         private DiagnosticInfoCollection m_diagnosticInfos;
         #endregion
     }
-    #endif
+#endif
     #endregion
 
     #region CallMethodRequest Class
-    #if (!OPCUA_EXCLUDE_CallMethodRequest)
+#if (!OPCUA_EXCLUDE_CallMethodRequest)
     /// <summary>
     /// A description for the CallMethodRequest DataType.
+    /// CallMethodRequest DataTypeµÄÃèÊö
     /// </summary>
     /// <exclude />
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
@@ -30282,6 +30283,7 @@ namespace Opc.Ua
         #region Public Properties
         /// <summary>
         /// A description for the ObjectId field.
+        /// ObjectId×Ö¶ÎµÄÃèÊö
         /// </summary>
         [DataMember(Name = "ObjectId", IsRequired = false, Order = 1)]
         public NodeId ObjectId

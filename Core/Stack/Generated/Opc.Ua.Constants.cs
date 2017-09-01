@@ -21522,6 +21522,7 @@ namespace Opc.Ua
 
         /// <summary>
         /// The identifier for the Organizes ReferenceType.
+        /// 组织参考类型的标识符
         /// </summary>
         public static readonly NodeId Organizes = new NodeId(Opc.Ua.ReferenceTypes.Organizes);
 

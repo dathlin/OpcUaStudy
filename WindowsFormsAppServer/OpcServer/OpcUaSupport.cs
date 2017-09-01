@@ -577,6 +577,7 @@ namespace WindowsFormsAppServer
             IList<object> inputArguments,
             IList<object> outputArguments)
         {
+
             // all arguments must be provided.
             if (inputArguments.Count < 2)
             {
@@ -592,8 +593,9 @@ namespace WindowsFormsAppServer
                 outputArguments[0] = "我也不知道刚刚发生了什么，调用设备为：" + method.Parent.DisplayName;
                 return ServiceResult.Good;
             }
-            catch
+            catch(Exception ex)
             {
+                System.Windows.Forms.MessageBox.Show(ex.Message);
                 return new ServiceResult(StatusCodes.BadInvalidArgument);
             }
         }
