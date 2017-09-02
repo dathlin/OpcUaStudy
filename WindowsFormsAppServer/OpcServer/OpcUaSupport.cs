@@ -199,15 +199,6 @@ namespace WindowsFormsAppServer
         {
             SystemContext.NodeIdFactory = this;
 
-            // get the configuration for the node manager.
-            m_configuration = configuration.ParseExtension<CustomerServerConfiguration>();
-
-            // use suitable defaults if no configuration exists.
-            if (m_configuration == null)
-            {
-                m_configuration = new CustomerServerConfiguration();
-            }
-
             timer1 = new System.Timers.Timer(500);
             timer1.Elapsed += Timer1_Elapsed;
             timer1.Start();
@@ -325,8 +316,8 @@ namespace WindowsFormsAppServer
 
                     addMethod.InputArguments.Value = new Argument[]
                     {
-                        new Argument() { Name = "UInt32 value", Description = "UInt32 value",  DataType = DataTypeIds.UInt32, ValueRank = ValueRanks.Scalar },
-                        new Argument() { Name = "UInt32 value", Description = "UInt32 value",  DataType = DataTypeIds.UInt32, ValueRank = ValueRanks.Scalar }
+                        new Argument() { Name = "Int32 value", Description = "Int32 value",  DataType = DataTypeIds.Int32, ValueRank = ValueRanks.Scalar },
+                        new Argument() { Name = "Int32 value", Description = "Int32 value",  DataType = DataTypeIds.Int32, ValueRank = ValueRanks.Scalar }
                     };
 
                     // set output arguments
@@ -563,10 +554,68 @@ namespace WindowsFormsAppServer
         #endregion
 
         #region Overridden Methods
+
+        /// <summary>
+        /// Returns a unique handle for the node.
+        /// </summary>
+        protected override NodeHandle GetManagerHandle(ServerSystemContext context, NodeId nodeId, IDictionary<NodeId, NodeState> cache)
+        {
+            lock (Lock)
+            {
+                // quickly exclude nodes that are not in the namespace. 
+                if (!IsNodeIdInNamespace(nodeId))
+                {
+                    return null;
+                }
+
+                NodeState node = null;
+
+                if (!PredefinedNodes.TryGetValue(nodeId, out node))
+                {
+                    return null;
+                }
+
+                NodeHandle handle = new NodeHandle();
+
+                handle.NodeId = nodeId;
+                handle.Node = node;
+                handle.Validated = true;
+
+                return handle;
+            }
+        }
+
+        /// <summary>
+        /// Verifies that the specified node exists.
+        /// </summary>
+        protected override NodeState ValidateNode(
+            ServerSystemContext context,
+            NodeHandle handle,
+            IDictionary<NodeId, NodeState> cache)
+        {
+            // not valid if no root.
+            if (handle == null)
+            {
+                return null;
+            }
+
+            // check if previously validated.
+            if (handle.Validated)
+            {
+                return handle.Node;
+            }
+
+            // TBD
+
+            return null;
+        }
+
+
         #endregion
 
         #region Private Fields
-        private CustomerServerConfiguration m_configuration;
+
+
         #endregion
 
 
@@ -586,8 +635,8 @@ namespace WindowsFormsAppServer
 
             try
             {
-                UInt32 floatValue = (UInt32)inputArguments[0];
-                UInt32 uintValue = (UInt32)inputArguments[1];
+                Int32 floatValue = (Int32)inputArguments[0];
+                Int32 uintValue = (Int32)inputArguments[1];
 
                 // set output parameter
                 outputArguments[0] = "我也不知道刚刚发生了什么，调用设备为：" + method.Parent.DisplayName;
@@ -602,44 +651,7 @@ namespace WindowsFormsAppServer
 
     }
 
-    /// <summary>
-    /// Stores the configuration the data access node manager.
-    /// </summary>
-    [DataContract(Namespace = Namespaces.Huibo)]
-    public class CustomerServerConfiguration
-    {
-        #region Constructors
-        /// <summary>
-        /// The default constructor.
-        /// </summary>
-        public CustomerServerConfiguration()
-        {
-            Initialize();
-        }
 
-        /// <summary>
-        /// Initializes the object during deserialization.
-        /// </summary>
-        [OnDeserializing()]
-        private void Initialize(StreamingContext context)
-        {
-            Initialize();
-        }
-
-        /// <summary>
-        /// Sets private members to default values.
-        /// </summary>
-        private void Initialize()
-        {
-        }
-        #endregion
-
-        #region Public Properties
-        #endregion
-
-        #region Private Members
-        #endregion
-    }
     /// <summary>
     /// Defines constants for namespaces used by the application.
     /// </summary>
