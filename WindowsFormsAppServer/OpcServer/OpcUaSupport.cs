@@ -340,7 +340,7 @@ namespace WindowsFormsAppServer
 
                 }
 
-
+                SystemState = CreateVariable(rootMy, "Enable", DataTypeIds.Boolean, ValueRanks.Scalar, false);
 
 
 
@@ -351,6 +351,18 @@ namespace WindowsFormsAppServer
 
         private List<BaseDataVariableState<int>> list = null;
 
+
+        private BaseDataVariableState<bool> SystemState = null;
+
+
+        public void SetEnable(bool enable)
+        {
+            if(SystemState!=null)
+            {
+                SystemState.Value = enable;
+                SystemState.ClearChangeMasks(SystemContext, false);
+            }
+        }
 
 
         /// <summary>
@@ -447,10 +459,7 @@ namespace WindowsFormsAppServer
             return variable;
         }
 
-
-
-
-
+        
         /// <summary>
         /// Creates a new method.
         /// </summary>
