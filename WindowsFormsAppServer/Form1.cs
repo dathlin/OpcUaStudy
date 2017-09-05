@@ -24,7 +24,8 @@ namespace WindowsFormsAppServer
             server = new OpcUaServer("opc.tcp://localhost:62547/DataAccessServer",new DataAccessServer());//117.48.203.204
             server.AppConfig.TraceConfiguration.OutputFilePath = Application.StartupPath + @"\Logs\Opc.Ua.Huibo.txt";
             StandardServer server2 = server.AppInstance.Server as StandardServer;
-            dataAccess = server.AppInstance.Server as DataAccessServer;
+            dataAccessServer = server.AppInstance.Server as DataAccessServer;
+
             serverDiagnosticsCtrl1.Initialize(server2, server.AppConfig);
         }
 
@@ -32,16 +33,21 @@ namespace WindowsFormsAppServer
 
 
         public OpcUaServer server { get; set; }
-        private DataAccessServer dataAccess { get; set; }
+        public DataAccessServer dataAccessServer { get; set; }
 
         private void writeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //server.WriteNode("ns=2;s=1:Device B?Name", Guid.NewGuid().ToString("N"));
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            dataAccess.CurrentNodeManager.SetStatusChange(checkBox1.Checked);
+            dataAccessServer.CurrentNodeManager.SetEnable(true);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            dataAccessServer.CurrentNodeManager.SetEnable(false);
         }
     }
 }
