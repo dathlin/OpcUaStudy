@@ -39,15 +39,35 @@ namespace WindowsFormsAppServer
         {
             //server.WriteNode("ns=2;s=1:Device B?Name", Guid.NewGuid().ToString("N"));
         }
+        
 
-        private void button1_Click(object sender, EventArgs e)
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            dataAccessServer.CurrentNodeManager.SetEnable(true);
+            dataAccessServer.CurrentNodeManager.SetEnable(checkBox1.Checked);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+
+        private double[] RobotLocation = new double[6];
+
+        private void button14_Click(object sender, EventArgs e)
         {
-            dataAccessServer.CurrentNodeManager.SetEnable(false);
+            string data = Clipboard.GetText();
+            try
+            {
+                string[] list = data.Split(',');
+                textBox_J1.Text = list[0];
+                textBox_J2.Text = list[1];
+                textBox_J3.Text = list[2];
+                textBox_J4.Text = list[3];
+                textBox_J5.Text = list[4];
+                textBox_J6.Text = list[5];
+
+
+            }
+            catch
+            {
+                MessageBox.Show("数据格式不对");
+            }
         }
     }
 }

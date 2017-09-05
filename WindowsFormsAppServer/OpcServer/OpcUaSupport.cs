@@ -343,8 +343,24 @@ namespace WindowsFormsAppServer
                 SystemState = CreateVariable(rootMy, "Enable", DataTypeIds.Boolean, ValueRanks.Scalar, false);
 
 
+                
 
                 AddPredefinedNode(SystemContext, rootMy);
+
+
+
+                FolderState robots = CreateFolder(null, "Robots");
+                robots.AddReference(ReferenceTypes.Organizes, true, ObjectIds.ObjectsFolder);
+                references.Add(new NodeStateReference(ReferenceTypes.Organizes, false, robots.NodeId));
+                robots.EventNotifier = EventNotifiers.SubscribeToEvents;
+                AddRootNotifier(robots);
+
+
+                RobotA = new HuiBoRobot(robots, "RobotA", NamespaceIndex, SystemContext);
+                RobotB = new HuiBoRobot(robots, "RobotB", NamespaceIndex, SystemContext);
+                RobotC = new HuiBoRobot(robots, "RobotC", NamespaceIndex, SystemContext);
+
+                AddPredefinedNode(SystemContext, robots);
             }
         }
 
@@ -353,6 +369,11 @@ namespace WindowsFormsAppServer
 
 
         private BaseDataVariableState<bool> SystemState = null;
+
+
+        public HuiBoRobot RobotA { get; set; }
+        public HuiBoRobot RobotB { get; set; }
+        public HuiBoRobot RobotC { get; set; }
 
 
         public void SetEnable(bool enable)
@@ -459,7 +480,46 @@ namespace WindowsFormsAppServer
             return variable;
         }
 
-        
+        /// <summary>
+        /// Creates a new variable.
+        /// </summary>
+        private BaseDataVariableState CreateVariable(NodeState parent, string name, NodeId dataType, int valueRank, object defaultValue)
+        {
+            BaseDataVariableState variable = new BaseDataVariableState(parent);
+
+            variable.SymbolicName = name;
+            variable.ReferenceTypeId = ReferenceTypes.Organizes;
+            variable.TypeDefinitionId = VariableTypeIds.BaseDataVariableType;
+            if (parent == null)
+            {
+                variable.NodeId = new NodeId(name, NamespaceIndex);
+            }
+            else
+            {
+                variable.NodeId = new NodeId(parent.NodeId.ToString() + "/" + name);
+            }
+            variable.BrowseName = new QualifiedName(name, NamespaceIndex);
+            variable.DisplayName = new LocalizedText(name);
+            variable.WriteMask = AttributeWriteMask.DisplayName | AttributeWriteMask.Description;
+            variable.UserWriteMask = AttributeWriteMask.DisplayName | AttributeWriteMask.Description;
+            variable.DataType = dataType;
+            variable.ValueRank = valueRank;
+            variable.AccessLevel = AccessLevels.CurrentReadOrWrite;
+            variable.UserAccessLevel = AccessLevels.CurrentReadOrWrite;
+            variable.Historizing = false;
+            variable.Value = defaultValue;
+            variable.StatusCode = StatusCodes.Good;
+            variable.Timestamp = DateTime.Now;
+
+            if (parent != null)
+            {
+                parent.AddChild(variable);
+            }
+
+            return variable;
+        }
+
+
         /// <summary>
         /// Creates a new method.
         /// </summary>
@@ -658,6 +718,216 @@ namespace WindowsFormsAppServer
             }
         }
 
+    }
+
+    public class HuiBoRobot
+    {
+        public HuiBoRobot(NodeState parent, string name,ushort NamespaceIndex, ServerSystemContext systemContext)
+        {
+            SystemContext = systemContext;
+            FolderState myFolder = CreateFolder(parent, name, NamespaceIndex);
+
+
+            RobotMode = CreateVariable(myFolder, "RobotMode", DataTypeIds.Int32, ValueRanks.Scalar, 1, NamespaceIndex);
+            RobotMode.Description = "机器人的数据模式，1:关节 2:基座标 3:工具坐标";
+
+            RobotLocation = CreateVariable(myFolder, "RobotLocation", DataTypeIds.Double, ValueRanks.OneDimension, new double[6], NamespaceIndex);
+            RobotLocation.Description = "机器人的位置信息，该数据将根据模式不同而不一致";
+
+            UserArrayBool = CreateVariable(myFolder, "UserBool", DataTypeIds.Boolean, ValueRanks.OneDimension, new bool[16], NamespaceIndex);
+            UserArrayBool.Description = "备用的bool数据";
+            UserArrayFloat = CreateVariable(myFolder, "UserBool", DataTypeIds.Float, ValueRanks.OneDimension, new float[16], NamespaceIndex);
+            UserArrayFloat.Description = "备用的float数据";
+            UserArrayInt = CreateVariable(myFolder, "UserInt", DataTypeIds.Int32, ValueRanks.OneDimension, new int[16], NamespaceIndex);
+            UserArrayInt.Description = "备用的int数据";
+
+
+
+        }
+
+
+        private ServerSystemContext SystemContext = null;
+
+        /// <summary>
+        /// 机器人的模式
+        /// </summary>
+        private BaseDataVariableState<int> RobotMode { get; set; }
+
+
+
+
+        public void SetRobotMode(int mode)
+        {
+            if (0 < mode && mode < 4)
+            {
+                RobotMode.Value = mode;
+                RobotMode.ClearChangeMasks(SystemContext, false);
+            }
+        }
+       
+        
+
+
+        /// <summary>
+        /// 6个数据点
+        /// </summary>
+        private BaseDataVariableState RobotLocation { get; set; }
+
+
+        public void SetRobotLocation(double[] location)
+        {
+            RobotLocation.Value = location;
+            RobotLocation.ClearChangeMasks(SystemContext, false);
+        }
+
+
+
+
+        /// <summary>
+        /// bool型数组
+        /// </summary>
+        private BaseDataVariableState UserArrayBool { get; set; }
+
+        public void SetUserArrayBool(bool[] data)
+        {
+            UserArrayBool.Value = data;
+            UserArrayBool.ClearChangeMasks(SystemContext, false);
+        }
+        
+        /// <summary>
+        /// float型数组
+        /// </summary>
+        private BaseDataVariableState UserArrayFloat { get; set; }
+
+        public void SetUserArrayFloat(float[] data)
+        {
+            UserArrayFloat.Value = data;
+            UserArrayFloat.ClearChangeMasks(SystemContext, false);
+        }
+
+        /// <summary>
+        /// int32型数组
+        /// </summary>
+        private BaseDataVariableState UserArrayInt { get; set; }
+
+        public void SetUserArrayInt32(int[] data)
+        {
+            UserArrayInt.Value = data;
+            UserArrayInt.ClearChangeMasks(SystemContext, false);
+        }
+
+
+
+        /// <summary>
+        /// Creates a new folder.
+        /// </summary>
+        private FolderState CreateFolder(NodeState parent, string name,ushort NamespaceIndex)
+        {
+            FolderState folder = new FolderState(parent);
+
+            folder.SymbolicName = name;
+            folder.ReferenceTypeId = ReferenceTypes.Organizes;
+            folder.TypeDefinitionId = ObjectTypeIds.FolderType;
+            if (parent == null)
+            {
+                folder.NodeId = new NodeId(name, NamespaceIndex);
+            }
+            else
+            {
+                folder.NodeId = new NodeId(parent.NodeId.ToString() + "/" + name);
+            }
+            folder.BrowseName = new QualifiedName(name, NamespaceIndex);
+            folder.DisplayName = new LocalizedText(name);
+            folder.WriteMask = AttributeWriteMask.None;
+            folder.UserWriteMask = AttributeWriteMask.None;
+            folder.EventNotifier = EventNotifiers.None;
+
+            if (parent != null)
+            {
+                parent.AddChild(folder);
+            }
+
+            return folder;
+        }
+
+
+        /// <summary>
+        /// Creates a new variable.
+        /// </summary>
+        private BaseDataVariableState<T> CreateVariable<T>(NodeState parent, string name, NodeId dataType, int valueRank, T defaultValue, ushort NamespaceIndex)
+        {
+            BaseDataVariableState<T> variable = new BaseDataVariableState<T>(parent);
+
+            variable.SymbolicName = name;
+            variable.ReferenceTypeId = ReferenceTypes.Organizes;
+            variable.TypeDefinitionId = VariableTypeIds.BaseDataVariableType;
+            if (parent == null)
+            {
+                variable.NodeId = new NodeId(name, NamespaceIndex);
+            }
+            else
+            {
+                variable.NodeId = new NodeId(parent.NodeId.ToString() + "/" + name);
+            }
+            variable.BrowseName = new QualifiedName(name, NamespaceIndex);
+            variable.DisplayName = new LocalizedText(name);
+            variable.WriteMask = AttributeWriteMask.DisplayName | AttributeWriteMask.Description;
+            variable.UserWriteMask = AttributeWriteMask.DisplayName | AttributeWriteMask.Description;
+            variable.DataType = dataType;
+            variable.ValueRank = valueRank;
+            variable.AccessLevel = AccessLevels.CurrentReadOrWrite;
+            variable.UserAccessLevel = AccessLevels.CurrentReadOrWrite;
+            variable.Historizing = false;
+            variable.Value = defaultValue;
+            variable.StatusCode = StatusCodes.Good;
+            variable.Timestamp = DateTime.Now;
+
+            if (parent != null)
+            {
+                parent.AddChild(variable);
+            }
+
+            return variable;
+        }
+
+        /// <summary>
+        /// Creates a new variable.
+        /// </summary>
+        private BaseDataVariableState CreateVariable(NodeState parent, string name, NodeId dataType, int valueRank, object defaultValue, ushort NamespaceIndex)
+        {
+            BaseDataVariableState variable = new BaseDataVariableState(parent);
+
+            variable.SymbolicName = name;
+            variable.ReferenceTypeId = ReferenceTypes.Organizes;
+            variable.TypeDefinitionId = VariableTypeIds.BaseDataVariableType;
+            if (parent == null)
+            {
+                variable.NodeId = new NodeId(name, NamespaceIndex);
+            }
+            else
+            {
+                variable.NodeId = new NodeId(parent.NodeId.ToString() + "/" + name);
+            }
+            variable.BrowseName = new QualifiedName(name, NamespaceIndex);
+            variable.DisplayName = new LocalizedText(name);
+            variable.WriteMask = AttributeWriteMask.DisplayName | AttributeWriteMask.Description;
+            variable.UserWriteMask = AttributeWriteMask.DisplayName | AttributeWriteMask.Description;
+            variable.DataType = dataType;
+            variable.ValueRank = valueRank;
+            variable.AccessLevel = AccessLevels.CurrentReadOrWrite;
+            variable.UserAccessLevel = AccessLevels.CurrentReadOrWrite;
+            variable.Historizing = false;
+            variable.Value = defaultValue;
+            variable.StatusCode = StatusCodes.Good;
+            variable.Timestamp = DateTime.Now;
+
+            if (parent != null)
+            {
+                parent.AddChild(variable);
+            }
+
+            return variable;
+        }
     }
 
 
