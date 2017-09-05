@@ -252,6 +252,15 @@ namespace WindowsFormsAppServer
             }
         }
 
+        public void SetStatusChange(bool enable)
+        {
+            if(Enable!=null)
+            {
+                Enable.Value = enable;
+                Enable.ClearChangeMasks(SystemContext, false);
+            }
+        }
+
         #endregion
 
 
@@ -340,7 +349,7 @@ namespace WindowsFormsAppServer
 
                 }
 
-
+                Enable = CreateVariable(rootMy, "Enable", DataTypeIds.Boolean, ValueRanks.Scalar, false);
 
 
 
@@ -351,7 +360,7 @@ namespace WindowsFormsAppServer
 
         private List<BaseDataVariableState<int>> list = null;
 
-
+        private BaseDataVariableState<bool> Enable = null;
 
         /// <summary>
         /// 更改前触发，可以禁止更改掉，返回 Bad 即可
