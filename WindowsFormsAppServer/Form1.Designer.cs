@@ -59,7 +59,27 @@
             this.label5 = new System.Windows.Forms.Label();
             this.textBox_J1 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.groupIncrementalMove = new System.Windows.Forms.GroupBox();
+            this.numStep = new System.Windows.Forms.NumericUpDown();
+            this.lblstepIncrement = new System.Windows.Forms.Label();
+            this.rad_Move_Joints = new System.Windows.Forms.RadioButton();
+            this.rad_Move_wrt_Tool = new System.Windows.Forms.RadioButton();
+            this.rad_Move_wrt_Reference = new System.Windows.Forms.RadioButton();
+            this.btnTXneg = new System.Windows.Forms.Button();
+            this.btnTXpos = new System.Windows.Forms.Button();
+            this.btnTYneg = new System.Windows.Forms.Button();
+            this.btnTYpos = new System.Windows.Forms.Button();
+            this.btnRZpos = new System.Windows.Forms.Button();
+            this.btnTZneg = new System.Windows.Forms.Button();
+            this.btnRZneg = new System.Windows.Forms.Button();
+            this.btnTZpos = new System.Windows.Forms.Button();
+            this.btnRYpos = new System.Windows.Forms.Button();
+            this.btnRXneg = new System.Windows.Forms.Button();
+            this.btnRYneg = new System.Windows.Forms.Button();
+            this.btnRXpos = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
+            this.groupIncrementalMove.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numStep)).BeginInit();
             this.SuspendLayout();
             // 
             // serverDiagnosticsCtrl1
@@ -119,6 +139,7 @@
             this.button15.TabIndex = 60;
             this.button15.Text = "paste";
             this.button15.UseVisualStyleBackColor = true;
+            this.button15.Click += new System.EventHandler(this.button15_Click);
             // 
             // button14
             // 
@@ -346,12 +367,236 @@
             this.label4.TabIndex = 35;
             this.label4.Text = "J1：";
             // 
+            // groupIncrementalMove
+            // 
+            this.groupIncrementalMove.Controls.Add(this.numStep);
+            this.groupIncrementalMove.Controls.Add(this.lblstepIncrement);
+            this.groupIncrementalMove.Controls.Add(this.rad_Move_Joints);
+            this.groupIncrementalMove.Controls.Add(this.rad_Move_wrt_Tool);
+            this.groupIncrementalMove.Controls.Add(this.rad_Move_wrt_Reference);
+            this.groupIncrementalMove.Controls.Add(this.btnTXneg);
+            this.groupIncrementalMove.Controls.Add(this.btnTXpos);
+            this.groupIncrementalMove.Controls.Add(this.btnTYneg);
+            this.groupIncrementalMove.Controls.Add(this.btnTYpos);
+            this.groupIncrementalMove.Controls.Add(this.btnRZpos);
+            this.groupIncrementalMove.Controls.Add(this.btnTZneg);
+            this.groupIncrementalMove.Controls.Add(this.btnRZneg);
+            this.groupIncrementalMove.Controls.Add(this.btnTZpos);
+            this.groupIncrementalMove.Controls.Add(this.btnRYpos);
+            this.groupIncrementalMove.Controls.Add(this.btnRXneg);
+            this.groupIncrementalMove.Controls.Add(this.btnRYneg);
+            this.groupIncrementalMove.Controls.Add(this.btnRXpos);
+            this.groupIncrementalMove.Location = new System.Drawing.Point(361, 31);
+            this.groupIncrementalMove.Name = "groupIncrementalMove";
+            this.groupIncrementalMove.Size = new System.Drawing.Size(229, 240);
+            this.groupIncrementalMove.TabIndex = 61;
+            this.groupIncrementalMove.TabStop = false;
+            this.groupIncrementalMove.Text = "Incremental Move";
+            // 
+            // numStep
+            // 
+            this.numStep.DecimalPlaces = 1;
+            this.numStep.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numStep.Location = new System.Drawing.Point(93, 71);
+            this.numStep.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.numStep.Name = "numStep";
+            this.numStep.Size = new System.Drawing.Size(96, 23);
+            this.numStep.TabIndex = 48;
+            this.numStep.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // lblstepIncrement
+            // 
+            this.lblstepIncrement.AutoSize = true;
+            this.lblstepIncrement.Location = new System.Drawing.Point(6, 75);
+            this.lblstepIncrement.Name = "lblstepIncrement";
+            this.lblstepIncrement.Size = new System.Drawing.Size(71, 17);
+            this.lblstepIncrement.TabIndex = 47;
+            this.lblstepIncrement.Text = "Step (mm):";
+            // 
+            // rad_Move_Joints
+            // 
+            this.rad_Move_Joints.AutoSize = true;
+            this.rad_Move_Joints.Location = new System.Drawing.Point(11, 53);
+            this.rad_Move_Joints.Name = "rad_Move_Joints";
+            this.rad_Move_Joints.Size = new System.Drawing.Size(90, 21);
+            this.rad_Move_Joints.TabIndex = 2;
+            this.rad_Move_Joints.Text = "Joint Move";
+            this.rad_Move_Joints.UseVisualStyleBackColor = true;
+            this.rad_Move_Joints.CheckedChanged += new System.EventHandler(this.rad_Move_Joints_CheckedChanged);
+            // 
+            // rad_Move_wrt_Tool
+            // 
+            this.rad_Move_wrt_Tool.AutoSize = true;
+            this.rad_Move_wrt_Tool.Location = new System.Drawing.Point(11, 34);
+            this.rad_Move_wrt_Tool.Name = "rad_Move_wrt_Tool";
+            this.rad_Move_wrt_Tool.Size = new System.Drawing.Size(52, 21);
+            this.rad_Move_wrt_Tool.TabIndex = 1;
+            this.rad_Move_wrt_Tool.Text = "Tool";
+            this.rad_Move_wrt_Tool.UseVisualStyleBackColor = true;
+            this.rad_Move_wrt_Tool.CheckedChanged += new System.EventHandler(this.rad_Move_wrt_Tool_CheckedChanged);
+            // 
+            // rad_Move_wrt_Reference
+            // 
+            this.rad_Move_wrt_Reference.AutoSize = true;
+            this.rad_Move_wrt_Reference.Location = new System.Drawing.Point(11, 16);
+            this.rad_Move_wrt_Reference.Name = "rad_Move_wrt_Reference";
+            this.rad_Move_wrt_Reference.Size = new System.Drawing.Size(84, 21);
+            this.rad_Move_wrt_Reference.TabIndex = 0;
+            this.rad_Move_wrt_Reference.Text = "Reference";
+            this.rad_Move_wrt_Reference.UseVisualStyleBackColor = true;
+            this.rad_Move_wrt_Reference.CheckedChanged += new System.EventHandler(this.rad_Move_wrt_Reference_CheckedChanged);
+            // 
+            // btnTXneg
+            // 
+            this.btnTXneg.Location = new System.Drawing.Point(37, 96);
+            this.btnTXneg.Margin = new System.Windows.Forms.Padding(1);
+            this.btnTXneg.Name = "btnTXneg";
+            this.btnTXneg.Size = new System.Drawing.Size(60, 23);
+            this.btnTXneg.TabIndex = 27;
+            this.btnTXneg.Text = "X-";
+            this.btnTXneg.UseVisualStyleBackColor = true;
+            this.btnTXneg.Click += new System.EventHandler(this.btnTXneg_Click);
+            // 
+            // btnTXpos
+            // 
+            this.btnTXpos.Location = new System.Drawing.Point(142, 96);
+            this.btnTXpos.Margin = new System.Windows.Forms.Padding(1);
+            this.btnTXpos.Name = "btnTXpos";
+            this.btnTXpos.Size = new System.Drawing.Size(60, 23);
+            this.btnTXpos.TabIndex = 28;
+            this.btnTXpos.Text = "X+";
+            this.btnTXpos.UseVisualStyleBackColor = true;
+            this.btnTXpos.Click += new System.EventHandler(this.btnTXneg_Click);
+            // 
+            // btnTYneg
+            // 
+            this.btnTYneg.Location = new System.Drawing.Point(37, 119);
+            this.btnTYneg.Margin = new System.Windows.Forms.Padding(1);
+            this.btnTYneg.Name = "btnTYneg";
+            this.btnTYneg.Size = new System.Drawing.Size(60, 23);
+            this.btnTYneg.TabIndex = 29;
+            this.btnTYneg.Text = "Y-";
+            this.btnTYneg.UseVisualStyleBackColor = true;
+            this.btnTYneg.Click += new System.EventHandler(this.btnTXneg_Click);
+            // 
+            // btnTYpos
+            // 
+            this.btnTYpos.Location = new System.Drawing.Point(142, 119);
+            this.btnTYpos.Margin = new System.Windows.Forms.Padding(1);
+            this.btnTYpos.Name = "btnTYpos";
+            this.btnTYpos.Size = new System.Drawing.Size(60, 23);
+            this.btnTYpos.TabIndex = 30;
+            this.btnTYpos.Text = "Y+";
+            this.btnTYpos.UseVisualStyleBackColor = true;
+            this.btnTYpos.Click += new System.EventHandler(this.btnTXneg_Click);
+            // 
+            // btnRZpos
+            // 
+            this.btnRZpos.Location = new System.Drawing.Point(142, 211);
+            this.btnRZpos.Margin = new System.Windows.Forms.Padding(1);
+            this.btnRZpos.Name = "btnRZpos";
+            this.btnRZpos.Size = new System.Drawing.Size(60, 23);
+            this.btnRZpos.TabIndex = 38;
+            this.btnRZpos.Text = "rZ+";
+            this.btnRZpos.UseVisualStyleBackColor = true;
+            this.btnRZpos.Click += new System.EventHandler(this.btnTXneg_Click);
+            // 
+            // btnTZneg
+            // 
+            this.btnTZneg.Location = new System.Drawing.Point(37, 142);
+            this.btnTZneg.Margin = new System.Windows.Forms.Padding(1);
+            this.btnTZneg.Name = "btnTZneg";
+            this.btnTZneg.Size = new System.Drawing.Size(60, 23);
+            this.btnTZneg.TabIndex = 31;
+            this.btnTZneg.Text = "Z-";
+            this.btnTZneg.UseVisualStyleBackColor = true;
+            this.btnTZneg.Click += new System.EventHandler(this.btnTXneg_Click);
+            // 
+            // btnRZneg
+            // 
+            this.btnRZneg.Location = new System.Drawing.Point(37, 211);
+            this.btnRZneg.Margin = new System.Windows.Forms.Padding(1);
+            this.btnRZneg.Name = "btnRZneg";
+            this.btnRZneg.Size = new System.Drawing.Size(60, 23);
+            this.btnRZneg.TabIndex = 37;
+            this.btnRZneg.Text = "rZ-";
+            this.btnRZneg.UseVisualStyleBackColor = true;
+            this.btnRZneg.Click += new System.EventHandler(this.btnTXneg_Click);
+            // 
+            // btnTZpos
+            // 
+            this.btnTZpos.Location = new System.Drawing.Point(142, 142);
+            this.btnTZpos.Margin = new System.Windows.Forms.Padding(1);
+            this.btnTZpos.Name = "btnTZpos";
+            this.btnTZpos.Size = new System.Drawing.Size(60, 23);
+            this.btnTZpos.TabIndex = 32;
+            this.btnTZpos.Text = "Z+";
+            this.btnTZpos.UseVisualStyleBackColor = true;
+            this.btnTZpos.Click += new System.EventHandler(this.btnTXneg_Click);
+            // 
+            // btnRYpos
+            // 
+            this.btnRYpos.Location = new System.Drawing.Point(142, 188);
+            this.btnRYpos.Margin = new System.Windows.Forms.Padding(1);
+            this.btnRYpos.Name = "btnRYpos";
+            this.btnRYpos.Size = new System.Drawing.Size(60, 23);
+            this.btnRYpos.TabIndex = 36;
+            this.btnRYpos.Text = "rY+";
+            this.btnRYpos.UseVisualStyleBackColor = true;
+            this.btnRYpos.Click += new System.EventHandler(this.btnTXneg_Click);
+            // 
+            // btnRXneg
+            // 
+            this.btnRXneg.Location = new System.Drawing.Point(37, 165);
+            this.btnRXneg.Margin = new System.Windows.Forms.Padding(1);
+            this.btnRXneg.Name = "btnRXneg";
+            this.btnRXneg.Size = new System.Drawing.Size(60, 23);
+            this.btnRXneg.TabIndex = 33;
+            this.btnRXneg.Text = "rX-";
+            this.btnRXneg.UseVisualStyleBackColor = true;
+            this.btnRXneg.Click += new System.EventHandler(this.btnTXneg_Click);
+            // 
+            // btnRYneg
+            // 
+            this.btnRYneg.Location = new System.Drawing.Point(37, 188);
+            this.btnRYneg.Margin = new System.Windows.Forms.Padding(1);
+            this.btnRYneg.Name = "btnRYneg";
+            this.btnRYneg.Size = new System.Drawing.Size(60, 23);
+            this.btnRYneg.TabIndex = 35;
+            this.btnRYneg.Text = "rY-";
+            this.btnRYneg.UseVisualStyleBackColor = true;
+            this.btnRYneg.Click += new System.EventHandler(this.btnTXneg_Click);
+            // 
+            // btnRXpos
+            // 
+            this.btnRXpos.Location = new System.Drawing.Point(142, 165);
+            this.btnRXpos.Margin = new System.Windows.Forms.Padding(1);
+            this.btnRXpos.Name = "btnRXpos";
+            this.btnRXpos.Size = new System.Drawing.Size(60, 23);
+            this.btnRXpos.TabIndex = 34;
+            this.btnRXpos.Text = "rX+";
+            this.btnRXpos.UseVisualStyleBackColor = true;
+            this.btnRXpos.Click += new System.EventHandler(this.btnTXneg_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(984, 652);
+            this.Controls.Add(this.groupIncrementalMove);
             this.Controls.Add(this.button15);
             this.Controls.Add(this.button14);
             this.Controls.Add(this.textBox_Rz);
@@ -389,6 +634,9 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.groupIncrementalMove.ResumeLayout(false);
+            this.groupIncrementalMove.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numStep)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -426,6 +674,24 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox_J1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.GroupBox groupIncrementalMove;
+        private System.Windows.Forms.NumericUpDown numStep;
+        private System.Windows.Forms.Label lblstepIncrement;
+        private System.Windows.Forms.RadioButton rad_Move_Joints;
+        private System.Windows.Forms.RadioButton rad_Move_wrt_Tool;
+        private System.Windows.Forms.RadioButton rad_Move_wrt_Reference;
+        private System.Windows.Forms.Button btnTXneg;
+        private System.Windows.Forms.Button btnTXpos;
+        private System.Windows.Forms.Button btnTYneg;
+        private System.Windows.Forms.Button btnTYpos;
+        private System.Windows.Forms.Button btnRZpos;
+        private System.Windows.Forms.Button btnTZneg;
+        private System.Windows.Forms.Button btnRZneg;
+        private System.Windows.Forms.Button btnTZpos;
+        private System.Windows.Forms.Button btnRYpos;
+        private System.Windows.Forms.Button btnRXneg;
+        private System.Windows.Forms.Button btnRYneg;
+        private System.Windows.Forms.Button btnRXpos;
     }
 }
 

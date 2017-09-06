@@ -736,7 +736,7 @@ namespace WindowsFormsAppServer
 
             UserArrayBool = CreateVariable(myFolder, "UserBool", DataTypeIds.Boolean, ValueRanks.OneDimension, new bool[16], NamespaceIndex);
             UserArrayBool.Description = "备用的bool数据";
-            UserArrayFloat = CreateVariable(myFolder, "UserBool", DataTypeIds.Float, ValueRanks.OneDimension, new float[16], NamespaceIndex);
+            UserArrayFloat = CreateVariable(myFolder, "UserFloat", DataTypeIds.Float, ValueRanks.OneDimension, new float[16], NamespaceIndex);
             UserArrayFloat.Description = "备用的float数据";
             UserArrayInt = CreateVariable(myFolder, "UserInt", DataTypeIds.Int32, ValueRanks.OneDimension, new int[16], NamespaceIndex);
             UserArrayInt.Description = "备用的int数据";
