@@ -21,10 +21,11 @@ namespace WindowsFormsAppServer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // 配置opc ua的日志输出
+            Opc.Ua.Utils.SetTraceLog(Application.StartupPath + @"\Logs\Opc.Ua.Huibo.txt", true);
             // http://117.48.203.204:62547/DataAccessServer
             // opc.tcp://localhost:62547/DataAccessServer
             server = new OpcUaServer("opc.tcp://localhost:62547/DataAccessServer", new DataAccessServer());//117.48.203.204
-            server.AppConfig.TraceConfiguration.OutputFilePath = Application.StartupPath + @"\Logs\Opc.Ua.Huibo.txt";
             StandardServer server2 = server.AppInstance.Server as StandardServer;
             dataAccessServer = server.AppInstance.Server as DataAccessServer;
 
