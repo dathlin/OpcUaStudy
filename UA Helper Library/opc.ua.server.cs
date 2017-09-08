@@ -30,16 +30,6 @@ namespace Opc.Ua.Hsl
             // load the application configuration.
             //application.LoadApplicationConfiguration(false);
 
-            m_application.InstallConfig = new InstalledApplication()
-            {
-                TraceConfiguration = new TraceConfiguration()
-                {
-                    OutputFilePath = @"Logs\opc.ua.server.log.txt",
-                    DeleteOnLoad = true,
-                    TraceMasks = 515
-                }
-            };
-
             m_application.ApplicationConfiguration = GetDefaultConfiguration(url);
 
             // check the application certificate.
