@@ -342,8 +342,8 @@ namespace WindowsFormsAppServer
 
                 SystemState = CreateVariable(rootMy, "Enable", DataTypeIds.Boolean, ValueRanks.Scalar, false);
 
+                CreateVariable(rootMy, "Mat", DataTypeIds.Double, ValueRanks.TwoDimensions,new double[4,4]);
 
-                
 
                 AddPredefinedNode(SystemContext, rootMy);
 
